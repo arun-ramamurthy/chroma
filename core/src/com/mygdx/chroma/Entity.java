@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * @author Arun
@@ -41,10 +42,22 @@ public abstract class Entity
 	    renderY=(Constants.VIEWPORT_H/2+body.getPosition().y-data.get(i).getHeight()/2+data.get(i).getyOffset())*Constants.PIXELS_PER_METER;
 	    renderW=data.get(i).getWidth()*Constants.PIXELS_PER_METER;
 	    renderH=data.get(i).getHeight()*Constants.PIXELS_PER_METER;
-	    theta=(float)(body.getAngle()*180/Math.PI);
+	    theta=(float)((body.getAngle()+data.get(i).getAngle(Constants.RADIANS))*Constants.DEGREES_PER_RADIAN);
 	    batch.draw(new TextureRegion(data.get(i).getTexture()), renderX, renderY, data.get(i).getWidth()/2*Constants.PIXELS_PER_METER, data.get(i).getHeight()/2*Constants.PIXELS_PER_METER, renderW, renderH, 1f, 1f, theta);
 	    
 	}
+    }
+    
+    public void instantiate(World world)
+	 {
+	     this.body = world.createBody(this.getBdef());
+	     for(FixtureDef fd : this.getFixtures())
+		 this.body.createFixture(fd);
+	 }
+    
+    public void update()
+    {
+	
     }
     /**
      * Returns the private variable, this.bdef.

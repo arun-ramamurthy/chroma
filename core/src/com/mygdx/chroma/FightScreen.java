@@ -18,77 +18,68 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class FightScreen extends Screen {
+public class FightScreen extends Screen
+{
 
-	World world;
-	OrthographicCamera camera;
-	Box2DDebugRenderer dbr;
+    World	      world;
+    OrthographicCamera camera;
+    Box2DDebugRenderer dbr;
+    Player player;
+    Dummy	      ball;
+    DummyPlatform	ground;
+
+    @Override
+    public void create() {
+	Box2D.init();
+	world=new World(Constants.GRAVITY, true);
+	camera=new OrthographicCamera(Constants.VIEWPORT_W, Constants.VIEWPORT_H);
+	dbr=new Box2DDebugRenderer();
 	
-	Dummy ball;
-	@Override
-	public void create() {
-		Box2D.init();
-		world=new World(Constants.GRAVITY, true);
-		camera=new OrthographicCamera(Constants.VIEWPORT_W, Constants.VIEWPORT_H);
-		dbr=new Box2DDebugRenderer();
-		
-		BodyDef groundDef=new BodyDef();
-		groundDef.type=BodyType.StaticBody;
-		groundDef.position.set(new Vector2(0, -camera.viewportHeight/2+1f));
-		
-		PolygonShape groundShape=new PolygonShape();
-		groundShape.setAsBox(camera.viewportWidth/2, 0.5f);
-		
-		Body groundBody=world.createBody(groundDef);
-		groundBody.createFixture(groundShape, 0f);
-		
-		
-		ball = new Dummy(4, 5, 1, 1, new Texture(Gdx.files.internal("badlogic.jpg")));
-		Constants.instantiate(ball, world);
-	}
+	player = new Player(3, 4);
+	player.instantiate(world);
+	
+	ball=new Dummy(4, 5, 1, 1.5f, 5f, true, new Texture(Gdx.files.internal("dummy-red.jpg")));
+	ball.instantiate(world);
+	
+	ground=new DummyPlatform(0, 0, 15, 0.2f, new Texture(Gdx.files.internal("dummy-blue.jpg")));
+	ground.instantiate(world);
+    }
 
-	@Override
-	public void update() {
-		
-		if(Gdx.input.isKeyPressed(Keys.UP))
-			ball.body.applyLinearImpulse(0f, 0.25f, ball.body.getPosition().x, ball.body.getPosition().y, true);
-		if(Gdx.input.isKeyPressed(Keys.LEFT))
-			ball.body.applyForce(-0.2f, 0f, ball.body.getPosition().x, ball.body.getPosition().y+1, true);
-		if(Gdx.input.isKeyPressed(Keys.RIGHT))
-			ball.body.applyForce(0.2f, 0f, ball.body.getPosition().x, ball.body.getPosition().y+1, true);
-		world.step(Constants.TIME_STEP, 6, 2);
-	}
+    @Override
+    public void update() {
+	ball.update();
+	player.update();
+	world.step(Constants.TIME_STEP, 6, 2);
+    }
 
-	@Override
-	public void render(SpriteBatch batch) {
-		
-		batch.begin();
-		ball.draw(batch);
-		batch.end(); 
-		
-		
-		
-		
-		dbr.render(world, camera.combined);
-	}
+    @Override
+    public void render(SpriteBatch batch) {
 
+	batch.begin();
+	player.draw(batch);
+	ball.draw(batch);
+	ground.draw(batch);
+	batch.end();
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
+	dbr.render(world, camera.combined);
+    }
 
-	}
+    @Override
+    public void dispose() {
+	// TODO Auto-generated method stub
 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
+    }
+ 
+    @Override
+    public void pause() {
+	// TODO Auto-generated method stub
 
-	}
+    }
 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
+    @Override
+    public void resume() {
+	// TODO Auto-generated method stub
 
-	}
+    }
 
 }

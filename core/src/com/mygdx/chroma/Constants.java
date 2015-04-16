@@ -31,6 +31,16 @@ public class Constants
 	public static final float VIEWPORT_H = HEIGHT/PIXELS_PER_METER; //9 meters
 	
 	public static final float VIEWPORT_W = WIDTH/PIXELS_PER_METER; //16 meters
+	
+	public static final Integer MOVING_LEFT=0b001;
+	public static final Integer MOVING_RIGHT=0b010;
+	public static final Integer JUMPING=0b100;
+	
+	public static final boolean DEGREES=false;
+	public static final boolean RADIANS=true;
+	public static final float RADIANS_PER_DEGREES=(float)(Math.PI/180);
+	public static final float DEGREES_PER_RADIAN=(float)(180/Math.PI);
+	
 	//TOOLS
 	 public static Animation generateAnimation(String spriteSheetName, int rows, int cols, float animationSpeed)
 	    {
@@ -44,10 +54,5 @@ public class Constants
 		return new Animation(animationSpeed, tempArr1D);
 	    }
 	 
-	 public static void instantiate(Entity entity, World world)
-	 {
-	     entity.body = world.createBody(entity.getBdef());
-	     for(FixtureDef fd : entity.getFixtures())
-		 entity.body.createFixture(fd);
-	 }
+	 
 }

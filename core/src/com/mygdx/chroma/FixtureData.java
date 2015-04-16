@@ -19,6 +19,8 @@ public class FixtureData
     private float width;
     /** The height of the fixture, in meters.*/
     private float height;
+    /** The angle of rotation from the body of the fixture, in degrees.*/
+    private float angle;
     
     public FixtureData(Texture texture, float width, float height)
     {
@@ -26,6 +28,17 @@ public class FixtureData
 	this.tint=new Color(1,1,1,1);
 	this.xOffset=0;
 	this.yOffset=0;
+	this.width=width;
+	this.height=height;
+    }
+
+    public FixtureData(Texture texture, float width, float height, float xOffset, float yOffset, float angle)
+    {
+	this.texture=texture;
+	this.tint=new Color(1,1,1,1);
+	this.xOffset=xOffset;
+	this.yOffset=yOffset;
+	this.angle=angle;
 	this.width=width;
 	this.height=height;
     }
@@ -100,6 +113,27 @@ public class FixtureData
      */
     public float getHeight() {
         return this.height;
+    }
+
+    /**
+     * Returns the private variable, this.angle, in radians.
+     * @return this.angle
+     */
+    public float getAngle(boolean units)
+    {
+        if(units==Constants.DEGREES)
+            return this.angle;
+        else
+            return this.angle*Constants.RADIANS_PER_DEGREES;
+    }
+
+    /**
+     * Sets the private variable, this.angle, to the passed parameter, angle.
+     * @param angle the new value of this.angle
+     */
+    public void setAngle(float angle)
+    {
+        this.angle=angle;
     }
 
    
