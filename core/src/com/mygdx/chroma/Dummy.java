@@ -36,10 +36,10 @@ public class Dummy extends Entity
 	fixture.density=density;
 	fixture.friction=0.3f;
 	fixture.restitution=0.3f;
-	this.fDefs.add(fixture);
 	
-	FixtureData data = new FixtureData(img, w, h);
-	this.data.put(fixture, data);
+	FixtureData data = new FixtureData(Constants.DUMMY_MAIN, img, w, h);
+	data.setFd(fixture);
+	this.data.put(Constants.DUMMY_MAIN, data);
     }
     
     public void update()
@@ -48,9 +48,9 @@ public class Dummy extends Entity
 	if(Gdx.input.isKeyPressed(Keys.W))
 		this.body.applyLinearImpulse(0f, 0.5f, this.body.getPosition().x, this.body.getPosition().y, true);
 	if(Gdx.input.isKeyPressed(Keys.A))
-		this.body.applyLinearImpulse(-0.1f, 0f, this.body.getPosition().x, this.body.getPosition().y+this.data.get(this.fDefs.get(0)).getHeight()/2, true);
+		this.body.applyLinearImpulse(-0.1f, 0f, this.body.getPosition().x, this.body.getPosition().y+this.data.get(Constants.DUMMY_MAIN).getHeight()/2, true);
 	if(Gdx.input.isKeyPressed(Keys.D))
-		this.body.applyLinearImpulse(0.1f, 0f, this.body.getPosition().x, this.body.getPosition().y+this.data.get(this.fDefs.get(0)).getHeight()/2, true);
+		this.body.applyLinearImpulse(0.1f, 0f, this.body.getPosition().x, this.body.getPosition().y+this.data.get(Constants.DUMMY_MAIN).getHeight()/2, true);
 	if(Gdx.input.isKeyPressed(Keys.S))
 	    	this.body.applyLinearImpulse(0f, -0.5f, this.body.getPosition().x, this.body.getPosition().y, true);
 	

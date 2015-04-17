@@ -29,10 +29,10 @@ public class DummyPlatform extends Entity
 	PolygonShape shape=new PolygonShape();
 	shape.setAsBox(w/2, h/2);
 	fixture.shape=shape;
-	this.fDefs.add(fixture);
 	
-	FixtureData data = new FixtureData(img, w, h);
-	this.data.put(fixture, data);
+	FixtureData data = new FixtureData(Constants.DUMMY_PLATFORM, img, w, h);
+	data.setFd(fixture);
+	this.data.put(Constants.DUMMY_PLATFORM, data);
     }
 
 }

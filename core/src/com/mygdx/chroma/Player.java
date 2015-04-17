@@ -31,11 +31,10 @@ public class Player extends Entity
 	this.bDef.type=BodyType.DynamicBody;
 	this.bDef.position.set(x,y);
 
-
 	PolygonShape shape=new PolygonShape();
 	
 	//Fixture 1 work
-	FixtureData data = new FixtureData(new Texture(Gdx.files.internal("dummy-red.jpg")), .75f, 1.5f);
+	FixtureData data = new FixtureData(Constants.PLAYER_BODY, new Texture(Gdx.files.internal("dummy-red.jpg")), .75f, 1.5f);
 	FixtureDef fixture=new FixtureDef();
 	shape.setAsBox(data.getWidth()/2, data.getHeight()/2);
 	fixture.shape=shape;
@@ -43,17 +42,17 @@ public class Player extends Entity
 	fixture.friction=1f;
 	fixture.restitution=0f;
 	fixture.isSensor=false;
-	this.fDefs.add(fixture);
-	this.data.put(fixture, data);
+	data.setFd(fixture);
+	this.data.put(Constants.PLAYER_BODY, data);
 	
 	//Fixture 2 work
 	PolygonShape shape2=new PolygonShape();
-	FixtureData wepData=new FixtureData(new Texture(Gdx.files.internal("dummy-blue.jpg")), 0.1f, 1f, this.data.get(this.fDefs.get(Constants.PLAYER_BODY)).getWidth()/2 , 0, 20);
+	FixtureData wepData=new FixtureData(Constants.PLAYER_WEAPON, new Texture(Gdx.files.internal("dummy-blue.jpg")), 0.1f, 1f, this.data.get(Constants.PLAYER_BODY).getWidth()/2 , 0, 20);
 	FixtureDef weapon = new FixtureDef();
 	shape2.setAsBox(wepData.getWidth()/2, wepData.getHeight()/2, new Vector2(wepData.getxOffset(), wepData.getyOffset()), wepData.getAngle(Constants.RADIANS));
-	weapon.shape=shape;
-	this.fDefs.add(weapon);
-	this.data.put(weapon, wepData);
+	weapon.shape=shape2;
+	wepData.setFd(weapon);
+	this.data.put(Constants.PLAYER_WEAPON, wepData);
 
 	state=0b000;
     }
@@ -85,14 +84,14 @@ public class Player extends Entity
 	}
 	if(Gdx.input.isKeyPressed(Keys.Z))
 	{
-	    this.body.destroyFixture(this.body.getFixtureList().get(Constants.PLAYER_WEAPON));
-	    FixtureDef newWeapon = this.fDefs.get(Constants.PLAYER_WEAPON);
-	    this.data.get(newWeapon).setAngle(this.data.get(newWeapon).getAngle(Constants.DEGREES)-30);
+	    this.body.destroyFixture(this.data.get(Constants.PLAYER_WEAPON).getFixture());
+	    FixtureDef newWeapon = this.data.get(Constants.PLAYER_WEAPON).getFd();
+	    this.data.get(Constants.PLAYER_WEAPON).setAngle(this.data.get(Constants.PLAYER_WEAPON).getAngle(Constants.DEGREES)-30);
 	    PolygonShape temp=new PolygonShape();
-	    temp.setAsBox(this.data.get(newWeapon).getWidth()/2, this.data.get(newWeapon).getHeight()/2, new Vector2(this.data.get(newWeapon).getxOffset(), this.data.get(newWeapon).getyOffset()), this.data.get(newWeapon).getAngle(Constants.RADIANS));
+	    temp.setAsBox(this.data.get(Constants.PLAYER_WEAPON).getWidth()/2, this.data.get(Constants.PLAYER_WEAPON).getHeight()/2, new Vector2(this.data.get(Constants.PLAYER_WEAPON).getxOffset(), this.data.get(Constants.PLAYER_WEAPON).getyOffset()), this.data.get(Constants.PLAYER_WEAPON).getAngle(Constants.RADIANS));
 	    newWeapon.shape=temp;
-	    this.fDefs.set(Constants.PLAYER_WEAPON, newWeapon);
-	    this.body.createFixture(this.fDefs.get(Constants.PLAYER_WEAPON));
+	    this.data.get(Constants.PLAYER_WEAPON).setFd(newWeapon);
+	    this.body.createFixture(this.data.get(Constants.PLAYER_WEAPON).getFd());
 	}
 
     }

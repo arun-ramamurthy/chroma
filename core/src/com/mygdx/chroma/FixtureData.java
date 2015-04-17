@@ -3,10 +3,15 @@ package com.mygdx.chroma;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 
 public class FixtureData
 {
+    private Integer tag;
+    private Fixture fixture;
+    private FixtureDef fd;
     /** The texture applied over this fixture.*/
     private Texture texture;
     /** The tint applied to the texture. */
@@ -22,18 +27,26 @@ public class FixtureData
     /** The angle of rotation from the body of the fixture, in degrees.*/
     private float angle;
     
-    public FixtureData(Texture texture, float width, float height)
+    public FixtureData(Integer tag, Texture texture, float width, float height)
     {
+	this.tag=tag;
+	this.fixture=null;
+	this.fd=null;
+	
 	this.texture=texture;
 	this.tint=new Color(1,1,1,1);
 	this.xOffset=0;
 	this.yOffset=0;
 	this.width=width;
 	this.height=height;
+	this.angle=0;
     }
 
-    public FixtureData(Texture texture, float width, float height, float xOffset, float yOffset, float angle)
+    public FixtureData(Integer tag, Texture texture, float width, float height, float xOffset, float yOffset, float angle)
     {
+	this.tag=tag;
+	this.fixture=null;
+	this.fd=null;
 	this.texture=texture;
 	this.tint=new Color(1,1,1,1);
 	this.xOffset=xOffset;
@@ -134,6 +147,51 @@ public class FixtureData
     public void setAngle(float angle)
     {
         this.angle=angle;
+    }
+
+    /**
+     * Returns the private variable, this.fixture.
+     * @return this.fixture
+     */
+    public Fixture getFixture()
+    {
+        return this.fixture;
+    }
+
+    /**
+     * Sets the private variable, this.fixture, to the passed parameter, fixture.
+     * @param fixture the new value of this.fixture
+     */
+    public void setFixture(Fixture fixture)
+    {
+        this.fixture=fixture;
+    }
+
+    /**
+     * Returns the private variable, this.fd.
+     * @return this.fd
+     */
+    public FixtureDef getFd()
+    {
+        return this.fd;
+    }
+
+    /**
+     * Sets the private variable, this.fd, to the passed parameter, fd.
+     * @param fd the new value of this.fd
+     */
+    public void setFd(FixtureDef fd)
+    {
+        this.fd=fd;
+    }
+
+    /**
+     * Returns the private variable, this.tag.
+     * @return this.tag
+     */
+    public Integer getTag()
+    {
+        return this.tag;
     }
 
    

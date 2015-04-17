@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		new LwjglApplication(new ChromaMain(), config);
 		config.title = "Chroma";
-        config.width = Constants.WIDTH;
-        config.height = Constants.HEIGHT;
+        config.width = Constants.SCREEN_WIDTH;
+        config.height = Constants.SCREEN_HEIGHT;
 	}
 }

@@ -32,7 +32,7 @@ public class FightScreen extends Screen
     public void create() {
 	Box2D.init();
 	world=new World(Constants.GRAVITY, true);
-	camera=new OrthographicCamera(Constants.VIEWPORT_W, Constants.VIEWPORT_H);
+	camera=new OrthographicCamera(Constants.PHYSICS_WIDTH, Constants.PHYSICS_HEIGHT);
 	dbr=new Box2DDebugRenderer();
 	
 	player = new Player(3, 4);

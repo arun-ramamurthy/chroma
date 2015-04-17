@@ -22,29 +22,28 @@ public abstract class Entity
 {
     public Body body;
     protected BodyDef bDef;
-    protected ArrayList<FixtureDef> fDefs;
-    protected Hashtable<FixtureDef, FixtureData> data;
+    protected Hashtable<Integer, FixtureData> data;
     
     public Entity()
     {
 	body = null;
 	bDef=new BodyDef();
-	fDefs = new ArrayList<FixtureDef>();
-	data = new Hashtable<FixtureDef, FixtureData>();
+	data = new Hashtable<Integer, FixtureData>();
     }
 
     public void draw(SpriteBatch batch)
     {
 	
 	float renderX, renderY, renderW, renderH, theta;
-	for(FixtureDef fixture : this.getData().keySet())
+	for(Integer tag : this.getData().keySet())
 	{
-	    renderX=(Constants.VIEWPORT_W/2+body.getPosition().x-data.get(fixture).getWidth()/2+data.get(fixture).getxOffset())*Constants.PIXELS_PER_METER;
-	    renderY=(Constants.VIEWPORT_H/2+body.getPosition().y-data.get(fixture).getHeight()/2+data.get(fixture).getyOffset())*Constants.PIXELS_PER_METER;
-	    renderW=data.get(fixture).getWidth()*Constants.PIXELS_PER_METER;
-	    renderH=data.get(fixture).getHeight()*Constants.PIXELS_PER_METER;
-	    theta=(float)((body.getAngle()+data.get(fixture).getAngle(Constants.RADIANS))*Constants.DEGREES_PER_RADIAN);
-	    batch.draw(new TextureRegion(data.get(fixture).getTexture()), renderX, renderY, data.get(fixture).getWidth()/2*Constants.PIXELS_PER_METER, data.get(fixture).getHeight()/2*Constants.PIXELS_PER_METER, renderW, renderH, 1f, 1f, theta);
+	  
+	    renderX=(Constants.PHYSICS_WIDTH/2+body.getPosition().x-data.get(tag).getWidth()/2+data.get(tag).getxOffset())*Constants.PIXELS_PER_METER;
+	    renderY=(Constants.PHYSICS_HEIGHT/2+body.getPosition().y-data.get(tag).getHeight()/2+data.get(tag).getyOffset())*Constants.PIXELS_PER_METER;
+	    renderW=data.get(tag).getWidth()*Constants.PIXELS_PER_METER;
+	    renderH=data.get(tag).getHeight()*Constants.PIXELS_PER_METER;
+	    theta=(float)((body.getAngle()+data.get(tag).getAngle(Constants.RADIANS))*Constants.DEGREES_PER_RADIAN);
+	    batch.draw(new TextureRegion(data.get(tag).getTexture()), renderX, renderY, data.get(tag).getWidth()/2*Constants.PIXELS_PER_METER, data.get(tag).getHeight()/2*Constants.PIXELS_PER_METER, renderW, renderH, 1f, 1f, theta);
 	    
 	}
     }
@@ -52,14 +51,22 @@ public abstract class Entity
     public void instantiate(World world)
 	 {
 	     this.body = world.createBody(this.getBdef());
-	     for(FixtureDef fd : this.getFixtureDefs())
-		 this.body.createFixture(fd);
+	     Fixture fixture;
+	     for(Integer tag : this.getData().keySet())
+	     {
+		 System.out.println(tag);
+		 this.body.createFixture(this.getData().get(tag).getFd());
+		 fixture=this.body.getFixtureList().get(this.body.getFixtureList().size-1);
+		 this.getData().get(tag).setFixture(fixture);
+	     }
+	     this.body.setUserData(this);
 	 }
     
     public void update()
     {
 	
     }
+    
     /**
      * Returns the private variable, this.bdef.
      * @return this.bdef
@@ -85,19 +92,13 @@ public abstract class Entity
     }
 
     /**
-     * Returns the private variable, this.fixtures.
-     * @return this.fixtures
-     */
-    public ArrayList<FixtureDef> getFixtureDefs() {
-        return this.fDefs;
-    }
-
-    /**
      * Returns the private variable, this.data.
      * @return this.data
      */
-    public Hashtable<FixtureDef, FixtureData> getData() {
+    public Hashtable<Integer, FixtureData> getData()
+    {
         return this.data;
     }
+
 
 }
