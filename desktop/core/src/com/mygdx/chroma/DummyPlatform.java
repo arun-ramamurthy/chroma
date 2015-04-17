@@ -22,17 +22,17 @@ public class DummyPlatform extends Entity
     {
 	super();
 	
-	this.bdef.type=BodyType.StaticBody;
-	this.bdef.position.set(x,y);
+	this.bDef.type=BodyType.StaticBody;
+	this.bDef.position.set(x,y);
 	
 	FixtureDef fixture=new FixtureDef();
 	PolygonShape shape=new PolygonShape();
 	shape.setAsBox(w/2, h/2);
 	fixture.shape=shape;
-	this.fixtures.add(fixture);
+	this.fDefs.add(fixture);
 	
 	FixtureData data = new FixtureData(img, w, h);
-	this.data.add(data);
+	this.data.put(fixture, data);
     }
 
 }

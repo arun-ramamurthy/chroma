@@ -24,10 +24,10 @@ public class Dummy extends Entity
 	super();
 	
 	if(dynamic)
-	    this.bdef.type=BodyType.DynamicBody;
+	    this.bDef.type=BodyType.DynamicBody;
 	else
-	    this.bdef.type=BodyType.StaticBody;
-	this.bdef.position.set(x,y);
+	    this.bDef.type=BodyType.StaticBody;
+	this.bDef.position.set(x,y);
 	
 	FixtureDef fixture=new FixtureDef();
 	PolygonShape shape=new PolygonShape();
@@ -36,10 +36,10 @@ public class Dummy extends Entity
 	fixture.density=density;
 	fixture.friction=0.3f;
 	fixture.restitution=0.3f;
-	this.fixtures.add(fixture);
+	this.fDefs.add(fixture);
 	
 	FixtureData data = new FixtureData(img, w, h);
-	this.data.add(data);
+	this.data.put(fixture, data);
     }
     
     public void update()
@@ -48,9 +48,9 @@ public class Dummy extends Entity
 	if(Gdx.input.isKeyPressed(Keys.W))
 		this.body.applyLinearImpulse(0f, 0.5f, this.body.getPosition().x, this.body.getPosition().y, true);
 	if(Gdx.input.isKeyPressed(Keys.A))
-		this.body.applyLinearImpulse(-0.1f, 0f, this.body.getPosition().x, this.body.getPosition().y+this.data.get(0).getHeight()/2, true);
+		this.body.applyLinearImpulse(-0.1f, 0f, this.body.getPosition().x, this.body.getPosition().y+this.data.get(this.fDefs.get(0)).getHeight()/2, true);
 	if(Gdx.input.isKeyPressed(Keys.D))
-		this.body.applyLinearImpulse(0.1f, 0f, this.body.getPosition().x, this.body.getPosition().y+this.data.get(0).getHeight()/2, true);
+		this.body.applyLinearImpulse(0.1f, 0f, this.body.getPosition().x, this.body.getPosition().y+this.data.get(this.fDefs.get(0)).getHeight()/2, true);
 	if(Gdx.input.isKeyPressed(Keys.S))
 	    	this.body.applyLinearImpulse(0f, -0.5f, this.body.getPosition().x, this.body.getPosition().y, true);
 	

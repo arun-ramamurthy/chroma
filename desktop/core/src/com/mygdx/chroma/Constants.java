@@ -41,6 +41,9 @@ public class Constants
 	public static final float RADIANS_PER_DEGREES=(float)(Math.PI/180);
 	public static final float DEGREES_PER_RADIAN=(float)(180/Math.PI);
 	
+	public static final int PLAYER_BODY=0;
+	public static final int PLAYER_WEAPON=1;
+	
 	//TOOLS
 	 public static Animation generateAnimation(String spriteSheetName, int rows, int cols, float animationSpeed)
 	    {
