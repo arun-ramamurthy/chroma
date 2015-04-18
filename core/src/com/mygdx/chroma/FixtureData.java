@@ -6,11 +6,17 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
-
+/**
+ * Represents all data accosciated with a given Fixture. 
+ * Accessed with a tag from Constants, it contains the Fixture and its FixtureDefinition, the Texture associated with that Fixture, and additional information as well. 
+ */
 public class FixtureData
 {
+    /** The tag used to access this FixtureData. Found in Constants. */
     private Integer tag;
+    /** The Fixture that this FixtureData represents. */
     private Fixture fixture;
+    /** The FixtureDef associated with the Fixture this FixtureData represents.*/
     private FixtureDef fd;
     /** The texture applied over this fixture.*/
     private Texture texture;
@@ -27,6 +33,13 @@ public class FixtureData
     /** The angle of rotation from the body of the fixture, in degrees.*/
     private float angle;
     
+    /** 
+     * Simple constructor.
+     * @param tag the tag used this access this FixtureData
+     * @param texture the texture meant to be drawn over the associated fixture
+     * @param width the width of the fixture, in meters
+     * @param height the height of the fixture, in meters
+     */
     public FixtureData(Integer tag, Texture texture, float width, float height)
     {
 	this.tag=tag;
@@ -42,6 +55,16 @@ public class FixtureData
 	this.angle=0;
     }
 
+    /**
+     * Constructor with more placement options.
+     * @param tag the tag used this access this FixtureData
+     * @param texture the texture meant to be drawn over the associated fixture
+     * @param width the width of the fixture, in meters
+     * @param height the height of the fixture, in meters
+     * @param xOffset the offset from the body in the x direction, in meters
+     * @param yOffset the offset from the body in the y direction, in meters
+     * @param angle the angle rotated from the origin of this Fixture, in degrees
+     */
     public FixtureData(Integer tag, Texture texture, float width, float height, float xOffset, float yOffset, float angle)
     {
 	this.tag=tag;
@@ -129,8 +152,9 @@ public class FixtureData
     }
 
     /**
-     * Returns the private variable, this.angle, in radians.
-     * @return this.angle
+     * Returns the angle of rotation about the Fixture's origin, in the specified unit
+     * @param units the units of the angle measurement (Constants.RADIANS or Constants.DEGREES)
+     * @return the angle of rotation in the specified unit
      */
     public float getAngle(boolean units)
     {
@@ -142,7 +166,7 @@ public class FixtureData
 
     /**
      * Sets the private variable, this.angle, to the passed parameter, angle.
-     * @param angle the new value of this.angle
+     * @param angle the new value of this.angle in degrees
      */
     public void setAngle(float angle)
     {

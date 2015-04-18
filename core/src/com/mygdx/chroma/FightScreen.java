@@ -34,7 +34,8 @@ public class FightScreen extends Screen
 	world=new World(Constants.GRAVITY, true);
 	camera=new OrthographicCamera(Constants.PHYSICS_WIDTH, Constants.PHYSICS_HEIGHT);
 	dbr=new Box2DDebugRenderer();
-	EntityManager em=new EntityManager(world);
+	LogicManager em=new LogicManager(world);
+	
 	player = new Player(3, 0);
 	player.instantiate(world);
 	

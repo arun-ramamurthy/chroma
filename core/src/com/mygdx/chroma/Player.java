@@ -12,20 +12,24 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 /**
- * @author Arun
- *
+ * The player of the game in the battle scenes.
  */
 public class Player extends Entity
 {
 
+    /** A collection of bits to decide the state of the player; i.e. is he moving, jumping, attacking, etc. */
     public Integer state;
 
+    /** Default constructor. Used just to check the class of entities. */
     public Player()
     {
 
     }
+    
     /**
-     * 
+     * Creates a new player at a specified location.
+     * @param x the x-coordinate of the player's initial placement, in meters from the origin.
+     * @param y the y-coordinate of the player's initial placement, in meters from the origin.
      */
     public Player(float x, float y)
     {
@@ -35,9 +39,10 @@ public class Player extends Entity
 	this.bDef.type=BodyType.DynamicBody;
 	this.bDef.position.set(x,y);
 
-	PolygonShape shape=new PolygonShape();
+	
 
-	//Fixture 1 work
+	//main body fixture work
+	PolygonShape shape=new PolygonShape();
 	FixtureData data = new FixtureData(Constants.PLAYER_BODY, new Texture(Gdx.files.internal("dummy-red.jpg")), .75f, 1.5f);
 	FixtureDef fixture=new FixtureDef();
 	shape.setAsBox(data.getWidth()/2, data.getHeight()/2);
@@ -49,15 +54,17 @@ public class Player extends Entity
 	data.setFd(fixture);
 	this.data.put(Constants.PLAYER_BODY, data);
 
-	//Fixture 2 work
+	//weapon fixture work
 	PolygonShape shape2=new PolygonShape();
-	FixtureData wepData=new FixtureData(Constants.PLAYER_WEAPON, new Texture(Gdx.files.internal("dummy-blue.jpg")), 0.1f, 1.5f, 0 , 0, 20);
+	FixtureData wepData=new FixtureData(Constants.PLAYER_WEAPON, new Texture(Gdx.files.internal("dummy-blue.jpg")), 0.1f, 1.8f, 0 , 0, 20);
 	FixtureDef weapon = new FixtureDef();
 	shape2.setAsBox(wepData.getWidth()/2, wepData.getHeight()/2, new Vector2(wepData.getxOffset(), wepData.getyOffset()), wepData.getAngle(Constants.RADIANS));
 	weapon.shape=shape2;
+	weapon.isSensor=true;
 	wepData.setFd(weapon);
 	this.data.put(Constants.PLAYER_WEAPON, wepData);
 
+	//sets the initial state to not doing anything
 	state=0b000;
     }
 
