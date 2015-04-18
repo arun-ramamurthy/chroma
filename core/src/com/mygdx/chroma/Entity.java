@@ -100,5 +100,12 @@ public abstract class Entity
         return this.data;
     }
 
+    public Fixture getFixture(Integer tag)
+    {
+	if(!this.data.keySet().contains(tag))
+	    return null;
+	else
+	    return this.data.get(tag).getFixture();
+    }
 
 }

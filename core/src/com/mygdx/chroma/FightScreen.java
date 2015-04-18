@@ -26,7 +26,7 @@ public class FightScreen extends Screen
     Box2DDebugRenderer dbr;
     Player player;
     Dummy	      ball;
-    DummyPlatform	ground;
+    DummyPlatform	ground, wall1, wall2, ceiling;
 
     @Override
     public void create() {
@@ -34,15 +34,24 @@ public class FightScreen extends Screen
 	world=new World(Constants.GRAVITY, true);
 	camera=new OrthographicCamera(Constants.PHYSICS_WIDTH, Constants.PHYSICS_HEIGHT);
 	dbr=new Box2DDebugRenderer();
-	
-	player = new Player(3, 4);
+	EntityManager em=new EntityManager(world);
+	player = new Player(3, 0);
 	player.instantiate(world);
 	
-	ball=new Dummy(4, 5, 1, 1.5f, 5f, true, new Texture(Gdx.files.internal("dummy-red.jpg")));
+	ball=new Dummy(4, 0, 1, 1.5f, 1f, true, new Texture(Gdx.files.internal("dummy-red.jpg")));
 	ball.instantiate(world);
 	
-	ground=new DummyPlatform(0, 0, 15, 0.2f, new Texture(Gdx.files.internal("dummy-blue.jpg")));
+	ground=new DummyPlatform(0, -Constants.PHYSICS_HEIGHT/2, 15, 0.2f, new Texture(Gdx.files.internal("dummy-blue.jpg")));
 	ground.instantiate(world);
+	
+	wall1=new DummyPlatform(-Constants.PHYSICS_WIDTH/2, 0, 1f, 15, new Texture(Gdx.files.internal("dummy-blue.jpg")));
+	wall1.instantiate(world);
+	
+	wall2=new DummyPlatform(Constants.PHYSICS_WIDTH/2, 0, 1f, 15, new Texture(Gdx.files.internal("dummy-blue.jpg")));
+	wall2.instantiate(world);
+	
+	ceiling=new DummyPlatform(0, Constants.PHYSICS_HEIGHT/2, 15, 0.2f, new Texture(Gdx.files.internal("dummy-blue.jpg")));
+	ceiling.instantiate(world);
     }
 
     @Override
@@ -59,6 +68,9 @@ public class FightScreen extends Screen
 	player.draw(batch);
 	ball.draw(batch);
 	ground.draw(batch);
+	wall1.draw(batch);
+	wall2.draw(batch);
+	ceiling.draw(batch);
 	batch.end();
 
 	dbr.render(world, camera.combined);

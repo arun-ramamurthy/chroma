@@ -36,13 +36,21 @@ public class EntityManager implements ContactListener
     @Override
     public void beginContact(Contact contact)
     {
+
 	Fixture f1=contact.getFixtureA();
 	Fixture f2=contact.getFixtureB();
 	Body b1 = f1.getBody();
 	Body b2 = f2.getBody();
 	Entity e1 = (Entity) b1.getUserData();
 	Entity e2 = (Entity) b2.getUserData();
-	
+	Player p;
+	if(!e1.getClass().isInstance(new Player()))
+	    return;
+	else
+	    p = (Player) e1;
+	System.out.println(Constants.ATTACKING==(p.state&Constants.ATTACKING));
+	if(Constants.ATTACKING==(p.state&Constants.ATTACKING) && f1==p.getFixture(Constants.PLAYER_WEAPON) && f2==e2.getFixture(Constants.DUMMY_MAIN))
+	    b2.applyLinearImpulse(-1f, 6f, b2.getPosition().x, b2.getPosition().y, true);
     }
 
     /* (non-Javadoc)

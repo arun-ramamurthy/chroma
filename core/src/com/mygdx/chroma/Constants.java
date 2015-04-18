@@ -36,6 +36,7 @@ public class Constants
 	public static final Integer MOVING_RIGHT=0b0010;
 	public static final Integer JUMPING=0b0100;
 	public static final Integer ATTACKING=0b1000;
+	public static final Integer SHOOTING=0b10000;
 	
 	public static final boolean DEGREES=false;
 	public static final boolean RADIANS=true;
@@ -46,6 +47,8 @@ public class Constants
 	public static final int PLAYER_WEAPON=0x0001;
 	public static final int DUMMY_MAIN=0x0000;
 	public static final int DUMMY_PLATFORM=0x1000;
+	
+	public static final int BOW_RANGE = 10;
 	
 	//TOOLS
 	 public static Animation generateAnimation(String spriteSheetName, int rows, int cols, float animationSpeed)

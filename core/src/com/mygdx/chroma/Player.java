@@ -20,6 +20,10 @@ public class Player extends Entity
 
     public Integer state;
 
+    public Player()
+    {
+
+    }
     /**
      * 
      */
@@ -32,7 +36,7 @@ public class Player extends Entity
 	this.bDef.position.set(x,y);
 
 	PolygonShape shape=new PolygonShape();
-	
+
 	//Fixture 1 work
 	FixtureData data = new FixtureData(Constants.PLAYER_BODY, new Texture(Gdx.files.internal("dummy-red.jpg")), .75f, 1.5f);
 	FixtureDef fixture=new FixtureDef();
@@ -44,10 +48,10 @@ public class Player extends Entity
 	fixture.isSensor=false;
 	data.setFd(fixture);
 	this.data.put(Constants.PLAYER_BODY, data);
-	
+
 	//Fixture 2 work
 	PolygonShape shape2=new PolygonShape();
-	FixtureData wepData=new FixtureData(Constants.PLAYER_WEAPON, new Texture(Gdx.files.internal("dummy-blue.jpg")), 0.1f, 1f, this.data.get(Constants.PLAYER_BODY).getWidth()/2 , 0, 20);
+	FixtureData wepData=new FixtureData(Constants.PLAYER_WEAPON, new Texture(Gdx.files.internal("dummy-blue.jpg")), 0.1f, 1.5f, 0 , 0, 20);
 	FixtureDef weapon = new FixtureDef();
 	shape2.setAsBox(wepData.getWidth()/2, wepData.getHeight()/2, new Vector2(wepData.getxOffset(), wepData.getyOffset()), wepData.getAngle(Constants.RADIANS));
 	weapon.shape=shape2;
@@ -63,6 +67,7 @@ public class Player extends Entity
 	if(!((state&Constants.JUMPING)==Constants.JUMPING) && Gdx.input.isKeyPressed(Keys.UP))
 	{
 	    state|=Constants.JUMPING;
+	    state=state&~Constants.ATTACKING;
 	    this.body.applyLinearImpulse(0f, 3f, this.body.getPosition().x, this.body.getPosition().y, true);
 	}
 	if(Gdx.input.isKeyPressed(Keys.LEFT))
@@ -84,9 +89,11 @@ public class Player extends Entity
 	}
 	if(Gdx.input.isKeyPressed(Keys.Z))
 	{
+	    this.state|=Constants.ATTACKING;
 	    this.body.destroyFixture(this.data.get(Constants.PLAYER_WEAPON).getFixture());
 	    FixtureDef newWeapon = this.data.get(Constants.PLAYER_WEAPON).getFd();
 	    this.data.get(Constants.PLAYER_WEAPON).setAngle(this.data.get(Constants.PLAYER_WEAPON).getAngle(Constants.DEGREES)-30);
+	    //this.data.get(Constants.PLAYER_WEAPON).setxOffset((float)(this.data.get(Constants.PLAYER_WEAPON).getxOffset()+0.1));
 	    PolygonShape temp=new PolygonShape();
 	    temp.setAsBox(this.data.get(Constants.PLAYER_WEAPON).getWidth()/2, this.data.get(Constants.PLAYER_WEAPON).getHeight()/2, new Vector2(this.data.get(Constants.PLAYER_WEAPON).getxOffset(), this.data.get(Constants.PLAYER_WEAPON).getyOffset()), this.data.get(Constants.PLAYER_WEAPON).getAngle(Constants.RADIANS));
 	    newWeapon.shape=temp;
@@ -94,6 +101,23 @@ public class Player extends Entity
 	    this.body.createFixture(this.data.get(Constants.PLAYER_WEAPON).getFd());
 	}
 
+	if(Gdx.input.isKeyPressed(Keys.X))
+	{
+	    this.state|=Constants.ATTACKING;
+	    this.body.destroyFixture(this.data.get(Constants.PLAYER_WEAPON).getFixture());
+	    FixtureDef newWeapon = this.data.get(Constants.PLAYER_WEAPON).getFd();
+	    this.data.get(Constants.PLAYER_WEAPON).setAngle(this.data.get(Constants.PLAYER_WEAPON).getAngle(Constants.DEGREES)+30);
+	    //this.data.get(Constants.PLAYER_WEAPON).setxOffset((float)(this.data.get(Constants.PLAYER_WEAPON).getxOffset()-0.1));
+	    PolygonShape temp=new PolygonShape();
+	    temp.setAsBox(this.data.get(Constants.PLAYER_WEAPON).getWidth()/2, this.data.get(Constants.PLAYER_WEAPON).getHeight()/2, new Vector2(this.data.get(Constants.PLAYER_WEAPON).getxOffset(), this.data.get(Constants.PLAYER_WEAPON).getyOffset()), this.data.get(Constants.PLAYER_WEAPON).getAngle(Constants.RADIANS));
+	    newWeapon.shape=temp;
+	    this.data.get(Constants.PLAYER_WEAPON).setFd(newWeapon);
+	    this.body.createFixture(this.data.get(Constants.PLAYER_WEAPON).getFd());
+	    
+	}
+	
+	if(!(Gdx.input.isKeyPressed(Keys.Z) || Gdx.input.isKeyPressed(Keys.X)))
+		this.state=state&~Constants.ATTACKING;
     }
 
 }
