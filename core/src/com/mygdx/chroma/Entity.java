@@ -6,6 +6,7 @@ package com.mygdx.chroma;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -53,7 +54,9 @@ public abstract class Entity
 	    renderW=data.get(tag).getWidth()*Constants.PIXELS_PER_METER;
 	    renderH=data.get(tag).getHeight()*Constants.PIXELS_PER_METER;
 	    theta=(float)((body.getAngle()+data.get(tag).getAngle(Constants.RADIANS))*Constants.DEGREES_PER_RADIAN);
+	    batch.setColor(data.get(tag).getTint());
 	    batch.draw(new TextureRegion(data.get(tag).getTexture()), renderX, renderY, data.get(tag).getWidth()/2*Constants.PIXELS_PER_METER, data.get(tag).getHeight()/2*Constants.PIXELS_PER_METER, renderW, renderH, 1f, 1f, theta);  
+	    batch.setColor(Color.WHITE);
 	}
     }
     

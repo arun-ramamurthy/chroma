@@ -16,7 +16,7 @@ public class DummyPlatform extends Entity
 {
 
     /**
-     * 
+     * Constructor
      */
     public DummyPlatform(float x, float y, float w, float h, Texture img)
     {

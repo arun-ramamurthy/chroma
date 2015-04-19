@@ -47,7 +47,7 @@ public class FixtureData
 	this.fd=null;
 	
 	this.texture=texture;
-	this.tint=new Color(1,1,1,1);
+	this.tint=new Color(Color.WHITE);
 	this.xOffset=0;
 	this.yOffset=0;
 	this.width=width;
@@ -71,7 +71,7 @@ public class FixtureData
 	this.fixture=null;
 	this.fd=null;
 	this.texture=texture;
-	this.tint=new Color(1,1,1,1);
+	this.tint=new Color(Color.WHITE);
 	this.xOffset=xOffset;
 	this.yOffset=yOffset;
 	this.angle=angle;
