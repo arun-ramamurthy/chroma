@@ -6,6 +6,8 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.chroma.screens.FightScreen;
+import com.mygdx.chroma.screens.ScreenManager;
 
 public class ChromaMain extends ApplicationAdapter {
 	SpriteBatch batch;

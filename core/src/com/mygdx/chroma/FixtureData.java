@@ -14,12 +14,12 @@ public class FixtureData
 {
     /** The tag used to access this FixtureData. Found in Constants. */
     private Integer tag;
-    /** The Fixture that this FixtureData represents. */
+    /** The Fixture that this FixtureData represents. Used purely for existence checking; DOES NOT UPDATE AFTER INSTANTIATION!*/
     private Fixture fixture;
     /** The FixtureDef associated with the Fixture this FixtureData represents.*/
     private FixtureDef fd;
     /** The texture applied over this fixture.*/
-    private Texture texture;
+    private TextureRegion texture;
     /** The tint applied to the texture. */
     private Color tint;
     /** The x-coordinate offset of the fixture from the center of the body, in meters.*/
@@ -33,6 +33,12 @@ public class FixtureData
     /** The angle of rotation from the body of the fixture, in degrees.*/
     private float angle;
     
+    /** Default constructor. */
+    public FixtureData()
+    {
+    	
+    }
+    
     /** 
      * Simple constructor.
      * @param tag the tag used this access this FixtureData
@@ -40,7 +46,7 @@ public class FixtureData
      * @param width the width of the fixture, in meters
      * @param height the height of the fixture, in meters
      */
-    public FixtureData(Integer tag, Texture texture, float width, float height)
+    public FixtureData(Integer tag, TextureRegion texture, float width, float height)
     {
 	this.tag=tag;
 	this.fixture=null;
@@ -65,7 +71,7 @@ public class FixtureData
      * @param yOffset the offset from the body in the y direction, in meters
      * @param angle the angle rotated from the origin of this Fixture, in degrees
      */
-    public FixtureData(Integer tag, Texture texture, float width, float height, float xOffset, float yOffset, float angle)
+    public FixtureData(Integer tag, TextureRegion texture, float width, float height, float xOffset, float yOffset, float angle)
     {
 	this.tag=tag;
 	this.fixture=null;
@@ -80,6 +86,42 @@ public class FixtureData
     }
 
     /**
+	 * Returns the private variable, this.fixture.
+	 * @return this.fixture
+	 */
+	public Fixture getFixture()
+	{
+	    return this.fixture;
+	}
+
+	/**
+	 * Sets the private variable, this.fixture, to the passed parameter, fixture.
+	 * @param fixture the new value of this.fixture
+	 */
+	public void setFixture(Fixture fixture)
+	{
+	    this.fixture=fixture;
+	}
+
+	/**
+	 * Returns the private variable, this.texture.
+	 * @return this.texture
+	 */
+	public TextureRegion getTexture() {
+	    return this.texture;
+	}
+
+	
+	/**
+	 * Sets the private variable, this.texture, to the passed parameter, texture.
+	 * @param texture the new value of this.texture
+	 */
+	public void setTexture(TextureRegion texture)
+	{
+		this.texture = texture;
+	}
+
+	/**
      * Returns the private variable, this.tint.
      * @return this.tint
      */
@@ -128,14 +170,6 @@ public class FixtureData
     }
 
     /**
-     * Returns the private variable, this.texture.
-     * @return this.texture
-     */
-    public Texture getTexture() {
-        return this.texture;
-    }
-
-    /**
      * Returns the private variable, this.width.
      * @return this.width
      */
@@ -174,24 +208,6 @@ public class FixtureData
     }
 
     /**
-     * Returns the private variable, this.fixture.
-     * @return this.fixture
-     */
-    public Fixture getFixture()
-    {
-        return this.fixture;
-    }
-
-    /**
-     * Sets the private variable, this.fixture, to the passed parameter, fixture.
-     * @param fixture the new value of this.fixture
-     */
-    public void setFixture(Fixture fixture)
-    {
-        this.fixture=fixture;
-    }
-
-    /**
      * Returns the private variable, this.fd.
      * @return this.fd
      */
@@ -199,7 +215,7 @@ public class FixtureData
     {
         return this.fd;
     }
-
+    
     /**
      * Sets the private variable, this.fd, to the passed parameter, fd.
      * @param fd the new value of this.fd
@@ -209,7 +225,8 @@ public class FixtureData
         this.fd=fd;
     }
 
-    /**
+
+	/**
      * Returns the private variable, this.tag.
      * @return this.tag
      */
