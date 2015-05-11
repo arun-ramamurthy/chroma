@@ -9,7 +9,7 @@ import com.mygdx.chroma.Constants;
 /** 
  * The superclass for all enemies in the game.
  */
-public class Enemy extends Entity
+public abstract class Enemy extends ActiveEntity
 {
 	/** A collection of bits to decide the state of the enemy; i.e. is it moving, jumping,
 	 * attacking, etc. */

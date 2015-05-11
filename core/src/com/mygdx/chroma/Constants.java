@@ -101,6 +101,8 @@ public class Constants
 	public static final int					ENEMY_MAIN			= 0x0010;
 	/** Designates a fixture as an arbitrary main hitbox. */
 	public static final int					DUMMY_MAIN			= 0x1000;
+	/** Designates a fixture as a terrain hitbox. */
+	public static final int					TERRAIN_MAIN		= 0x10000;
 
 	// WEAPON TYPES
 	/** Designates a weapon as the spear. */
@@ -116,43 +118,17 @@ public class Constants
 	/** The initial dimensions of the player. */
 	public static final Vector2				ID_PLAYER			= new Vector2(.75f, 1.5f);
 	/** The initial position of the spear relative to the player's main hitbox. */
-	public static final Vector2				IP_SPEAR			= new Vector2(ID_PLAYER.x*(3/4), 0);
+	public static final Vector2				IP_SPEAR			= new Vector2(ID_PLAYER.x*(3/4), 0-ID_PLAYER.y*(2/4));
 
-	// ANIMATIONS
-	/** The animation for player movement. */
-	public static final Animation			ANIM_PLAYER_RUNNING	= generateAnimation("player-running.png", 1, 4, 0.15f);
-
-	// TOOLS
-	/**
-	 * Generates an Animation using Libgdx methods.
-	 * @param spriteSheetName the full path name of the sprite sheet to use
-	 * @param rows the number of rows in the sprite sheet
-	 * @param cols the number of columns in the sprite sheet
-	 * @param animationSpeed the number of seconds between frames
-	 * @return the Animation
-	 */
-	public static Animation generateAnimation(String spriteSheetName, int rows, int cols, float animationSpeed)
-	{
-		Texture tempTexture = new Texture(Gdx.files.internal(spriteSheetName));
-		TextureRegion[][] tempArr2D = TextureRegion.split(
-				tempTexture,
-				tempTexture.getWidth()/cols,
-				tempTexture.getHeight()/rows);
-		TextureRegion[] tempArr1D = new TextureRegion[rows*cols];
-		int index = 0;
-		for(int r = 0; r<rows; r++)
-			for(int c = 0; c<cols; c++)
-				tempArr1D[index++] = tempArr2D[r][c];
-		return new Animation(animationSpeed, tempArr1D);
-	}
-
-	/**
-	 * The Heavyside function.
-	 * @param t the value to test
-	 * @param a the lower bound
-	 * @param b the upper bound
-	 * @return 1 if t is within the bounds, 0 if t is outside the bounds
-	 */
+	/** The Heavyside function.
+	 * 
+	 * @param t
+	 *            the value to test
+	 * @param a
+	 *            the lower bound
+	 * @param b
+	 *            the upper bound
+	 * @return 1 if t is within the bounds, 0 if t is outside the bounds */
 	public static int u(float t, double a, double b)
 	{
 		if(t<a||t>b)
@@ -161,20 +137,21 @@ public class Constants
 			return 1;
 	}
 
-	/**
-	 * Sets a new timestamp for a tag to the current time if it has not been set before, or resets it to the current time if it has.
-	 * @param tag the tag to refer to this timestamp with
-	 */
+	/** Sets a new timestamp for a tag to the current time if it has not been set before, or resets it to the current
+	 * time if it has.
+	 * 
+	 * @param tag
+	 *            the tag to refer to this timestamp with */
 	public static void setTimestamp(int tag)
 	{
 		timers.put(tag, TimeUtils.millis());
 	}
-	
-/**
- * Returns the number of milliseconds since the timestamp has been set.
- * @param tag the tag to refer to this timestamp with
- * @return  the number of milliseconds since the timestamp has been set.
- */
+
+	/** Returns the number of milliseconds since the timestamp has been set.
+	 * 
+	 * @param tag
+	 *            the tag to refer to this timestamp with
+	 * @return the number of milliseconds since the timestamp has been set. */
 	public static long getElapsed(int tag)
 	{
 		return TimeUtils.timeSinceMillis(timers.get(tag));

@@ -33,8 +33,6 @@ public abstract class Entity
 	 * Each FixtureData (and hence each Fixture and FixtureDef) in the body can be accessed by giving an Integer key
 	 * from the Constants class . A key is local to a body. */
 	protected Hashtable<Integer, FixtureData>	data;
-	/** The direction the entity is facing. See Constants.LEFT and Constants.RIGHT */
-	protected boolean							dir;
 	/** The state time of the entity. Used for animations. */
 	protected float								atime;
 
@@ -64,34 +62,17 @@ public abstract class Entity
 			renderH = data.get(tag).getHeight()*Constants.PIXELS_PER_METER;
 			theta = (float)((body.getAngle()+data.get(tag).getAngle(Constants.RADIANS))*Constants.DEGREES_PER_RADIAN);
 			batch.setColor(data.get(tag).getTint());
-			
-			if(this.isDir(Constants.LEFT)) {
-				batch.draw(
-						data.get(tag).getTexture(),
-						renderX,
-						renderY,
-						data.get(tag).getWidth()/2*Constants.PIXELS_PER_METER,
-						data.get(tag).getHeight()/2*Constants.PIXELS_PER_METER,
-						renderW,
-						renderH,
-						-1f,
-						1f,
-						theta);
-
-			}
-			else if(this.isDir(Constants.RIGHT))
-				batch.draw(
-						data.get(tag).getTexture(),
-						renderX,
-						renderY,
-						data.get(tag).getWidth()/2*Constants.PIXELS_PER_METER,
-						data.get(tag).getHeight()/2*Constants.PIXELS_PER_METER,
-						renderW,
-						renderH,
-						1f,
-						1f,
-						theta);
-
+			batch.draw(
+					data.get(tag).getTexture(),
+					renderX,
+					renderY,
+					data.get(tag).getWidth()/2*Constants.PIXELS_PER_METER,
+					data.get(tag).getHeight()/2*Constants.PIXELS_PER_METER,
+					renderW,
+					renderH,
+					1f,
+					1f,
+					theta);
 			batch.setColor(Color.WHITE);
 		}
 	}
@@ -116,15 +97,7 @@ public abstract class Entity
 	/** What the entity must do during each interval. */
 	public void update()
 	{
-		updateFixtures();
 		updateTextures();
-		updateMovement();
-
-	}
-
-	/** How the entity must move during each interval. Left non-overridden for non-moving entities. */
-	public void updateMovement()
-	{
 
 	}
 
@@ -134,25 +107,7 @@ public abstract class Entity
 
 	}
 
-	/** Destroys and reconstructs the fixtures of the entity during each interval. */
-	public void updateFixtures()
-	{
-		FixtureDef fd;
-		PolygonShape shape = new PolygonShape();
-		for(Integer tag : this.getData().keySet()) {
-			shape.setAsBox(
-					data.get(tag).getWidth()/2,
-					data.get(tag).getHeight()/2,
-					new Vector2(data.get(tag).getxOffset(), data.get(tag).getyOffset()),
-					data.get(tag).getAngle(Constants.RADIANS));
-			fd = this.getData().get(tag).getFd();
-			fd.shape = shape;
-			data.get(tag).setFd(fd);
-			this.body.destroyFixture(this.data.get(tag).getFixture());
-			this.body.createFixture(this.data.get(tag).getFd());
-		}
-	}
-
+	
 	/** Returns the private variable, this.bdef.
 	 * 
 	 * @return this.bdef */
@@ -199,20 +154,5 @@ public abstract class Entity
 			return this.data.get(tag).getFixture();
 	}
 
-	/** Returns the private variable, this.dir.
-	 * 
-	 * @return this.dir */
-	public boolean isDir(boolean dir)
-	{
-		return this.dir==dir;
-	}
-
-	/** Sets the private variable, this.dir, to the passed parameter, dir.
-	 * 
-	 * @param dir
-	 *            the new value of this.dir */
-	public void setDir(boolean dir)
-	{
-		this.dir = dir;
-	}
+	
 }

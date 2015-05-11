@@ -15,14 +15,13 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.chroma.Constants;
 import com.mygdx.chroma.FixtureData;
+import com.mygdx.chroma.Spriting;
 
 /** The player of the game in the battle scenes. */
-public class Player extends Entity
+public class Player extends ActiveEntity
 {
 
-	/** A collection of bits to decide the state of the player; i.e. is he moving, jumping,
-	 * attacking, etc. */
-	public int	state;
+	
 	public int	wepType;
 	public int	attackLength;
 
@@ -49,7 +48,7 @@ public class Player extends Entity
 
 		// main body fixture work
 		PolygonShape shape = new PolygonShape();
-		FixtureData data = new FixtureData(Constants.PLAYER_MAIN, new TextureRegion(new Texture(Gdx.files.internal("player-standing.png"))), Constants.ID_PLAYER.x, Constants.ID_PLAYER.y);
+		FixtureData data = new FixtureData(Constants.PLAYER_MAIN, Spriting.PLAYER, Constants.ID_PLAYER.x, Constants.ID_PLAYER.y);
 		FixtureDef fixture = new FixtureDef();
 		shape.setAsBox(data.getWidth()/2, data.getHeight()/2);
 		fixture.shape = shape;
@@ -68,7 +67,7 @@ public class Player extends Entity
 		switch(wepType)
 		{
 			case Constants.SPEAR:
-				wepData = new FixtureData(Constants.PLAYER_WEAPON, new TextureRegion(new Texture(Gdx.files.internal("sword.png"))), 1.5f, 0.5f, Constants.IP_SPEAR.x, Constants.IP_SPEAR.y, 0);
+				wepData = new FixtureData(Constants.PLAYER_WEAPON, Spriting.SPEAR, 1.5f, 0.25f, Constants.IP_SPEAR.x, Constants.IP_SPEAR.y, 0);
 				wepShape.setAsBox(
 						wepData.getWidth()/2,
 						wepData.getHeight()/2,
@@ -111,11 +110,10 @@ public class Player extends Entity
 	public void updateTextures()
 	{
 		if(state==0) atime = 0;
-		this.data.get(Constants.PLAYER_MAIN).setTexture(
-				new TextureRegion(new Texture(Gdx.files.internal("player-standing.png"))));
+		this.data.get(Constants.PLAYER_MAIN).setTexture(Spriting.PLAYER);
 		if((state&Constants.MOVING)==Constants.MOVING) {
 			this.data.get(Constants.PLAYER_MAIN).setTexture(
-					Constants.ANIM_PLAYER_RUNNING.getKeyFrame(atime += Gdx.graphics.getDeltaTime(), true));
+					Spriting.ANIM_PLAYER_RUNNING.getKeyFrame(atime += Gdx.graphics.getDeltaTime(), true));
 		}
 	}
 
@@ -160,7 +158,7 @@ public class Player extends Entity
 			if(Constants.getElapsed(Constants.CHARGING)>Constants.LONG_TIME)
 				this.data.get(Constants.PLAYER_MAIN).setTint(Color.BLUE);
 			else if(Constants.getElapsed(Constants.CHARGING)>Constants.MED_TIME)
-				this.data.get(Constants.PLAYER_MAIN).setTint(Color.LIGHT_GRAY);
+				this.data.get(Constants.PLAYER_MAIN).setTint(Color.YELLOW);
 			else
 				this.data.get(Constants.PLAYER_MAIN).setTint(Color.WHITE);
 		}
@@ -225,7 +223,7 @@ public class Player extends Entity
 
 				break;
 		}
-
+		updateFixtures();
 	}
 
 	/** Sends a linear impulse to the affected enemy depending on the attack.

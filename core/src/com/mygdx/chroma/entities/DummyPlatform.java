@@ -31,10 +31,11 @@ public class DummyPlatform extends Entity
 	FixtureDef fixture=new FixtureDef();
 	PolygonShape shape=new PolygonShape();
 	shape.setAsBox(w/2, h/2);
+	fixture.friction=1;
 	fixture.filter.categoryBits = Constants.TERRAIN;
 	fixture.filter.maskBits = Constants.PLAYER|Constants.ENEMY|Constants.OBJECT;
 	fixture.shape=shape;
-	
+
 	FixtureData data = new FixtureData(Constants.DUMMY_MAIN, img, w, h);
 	data.setFd(fixture);
 	this.data.put(Constants.DUMMY_MAIN, data);
