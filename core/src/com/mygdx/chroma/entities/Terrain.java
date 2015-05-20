@@ -61,14 +61,14 @@ public class Terrain extends Entity
 		fixture.shape=shape;
 		FixtureData data = new FixtureData(0, top, w, 1);
 		data.setFd(fixture);
-		this.data.put(Constants.DUMMY_MAIN, data);
-		for(float tempY=y-1; tempY>-3; tempY-=1f)
+		this.data.put(Constants.MAIN, data);
+		for(float tempY=-1; tempY>-5f; tempY-=1f)
 		{
 			FixtureData tData = new FixtureData((int)tempY, side, w, 1);
 			tData.setyOffset(tempY);
 			tData.setFd(fixture);
 			this.data.put((int)tempY, tData);
-			System.out.println("y:" + tempY);
+			
 		}
 		
 	}

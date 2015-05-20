@@ -35,7 +35,7 @@ public class DummyEnemy extends Enemy
 		fixture.restitution = .1f;
 		fixture.isSensor = false;
 		fixture.filter.categoryBits = Constants.ENEMY;
-		fixture.filter.maskBits = Constants.TERRAIN | Constants.ENEMY;
+		fixture.filter.maskBits = Constants.TERRAIN;
 		data.setFd(fixture);
 		this.data.put(Constants.ENEMY_MAIN, data);
 

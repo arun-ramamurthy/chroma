@@ -1,5 +1,6 @@
 package com.mygdx.chroma;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import com.badlogic.gdx.Gdx;
@@ -13,12 +14,16 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.mygdx.chroma.screens.FightScreen;
+import com.mygdx.chroma.screens.MapScreen;
+import com.mygdx.chroma.screens.Screen;
 
 /** Stores all constant information for the game. * */
 public class Constants
 {
 
 	// DIMENSIONING
+	public static final int					GRID_SIZE			= 3;
 	/** The conversion factor from meters to pixels. */
 	public static final float				PIXELS_PER_METER	= 80f;
 	/** The width of the visible game screen in pixels. */
@@ -34,6 +39,8 @@ public class Constants
 	/** The screen refresh rate. */
 	public static final float				TIME_STEP			= 1/30f;
 
+	public static final boolean				WIN					= true;
+	public static final boolean				LOSE				= false;
 	// DIRECTON AND ANGLING
 	/** Designates the direction as left. */
 	public static final boolean				LEFT				= true;
@@ -56,8 +63,10 @@ public class Constants
 	public static final long				MED_TIME			= 500;
 	/** The length of time to charge to unleash a 'strong' attack. */
 	public static final long				LONG_TIME			= 1500;
-	/** The length of time entities are stunned for after being hit. */
+	/** The length of time non-player entities are stunned for after being hit. */
 	public static final long				STUN_TIME			= 1000;
+	/** The length of time the player is stunned for after being hit. */
+	public static final float				PLAYER_STUN_TIME	= 100;
 
 	/** A hash table of timers, for use in a variety of actions. Each timer can be set and accessed via an integer key. */
 	public static Hashtable<Integer, Long>	timers				= new Hashtable<Integer, Long>();
@@ -93,16 +102,14 @@ public class Constants
 	public static final int					ATTACKING			= 0b10000;
 
 	// FIXTURE TAGS
+
+	public static final int					MAIN				= 0;
 	/** Designates a fixture as the player's main hitbox. */
-	public static final int					PLAYER_MAIN			= 0x0002;
+	public static final int					PLAYER_MAIN			= 0x2;
 	/** Designates a fixture as the player's weapon. */
-	public static final int					PLAYER_WEAPON		= 0x0001;
-	/** Designates a fxiture as an enemy's main hitbox. */
-	public static final int					ENEMY_MAIN			= 0x0010;
-	/** Designates a fixture as an arbitrary main hitbox. */
-	public static final int					DUMMY_MAIN			= 0x1000;
-	/** Designates a fixture as a terrain hitbox. */
-	public static final int					TERRAIN_MAIN		= 0x10000;
+	public static final int					PLAYER_WEAPON		= 0x1;
+
+	public static final int					PLAYER_HITBOX		= 0x3;
 
 	// WEAPON TYPES
 	/** Designates a weapon as the spear. */
@@ -116,9 +123,11 @@ public class Constants
 	// D = DIMENSION
 	// P = POSITION
 	/** The initial dimensions of the player. */
-	public static final Vector2				ID_PLAYER			= new Vector2(.75f, 1.5f);
+	public static final Vector2				ID_PLAYER			= new Vector2(.6f, 1.1f);
 	/** The initial position of the spear relative to the player's main hitbox. */
-	public static final Vector2				IP_SPEAR			= new Vector2(ID_PLAYER.x*(3/4), 0-ID_PLAYER.y*(2/4));
+	public static final Vector2				IP_SPEAR			= new Vector2(ID_PLAYER.x*(3/4), 0-ID_PLAYER.y*(2/3));
+
+	public static final float				JUMP_FORCE			= 2f;
 
 	/** The Heavyside function.
 	 * 

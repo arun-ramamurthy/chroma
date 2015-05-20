@@ -23,6 +23,8 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.mygdx.chroma.entities.Enemy;
 import com.mygdx.chroma.entities.Entity;
 import com.mygdx.chroma.entities.Player;
+import com.mygdx.chroma.screens.GameOverScreen;
+import com.mygdx.chroma.screens.ScreenManager;
 
 /** Conducts all the game logic for the fight screens. Contains a ContactListener and InputProcessor. */
 public class LogicManager implements ContactListener, InputProcessor
@@ -45,8 +47,17 @@ public class LogicManager implements ContactListener, InputProcessor
 	public void update()
 	{
 		player.update();
-		for(Enemy e : enemies)
-			e.update(player.getBody().getPosition().x, player.getBody().getPosition().y);
+		if(player.getHP()<=0)
+			ScreenManager.setScreen(new GameOverScreen());
+		for(int e=0; e<enemies.size(); e++)
+		{
+			enemies.get(e).update(player.getBody().getPosition().x, player.getBody().getPosition().y);
+			if(enemies.get(e).getHP()<=0)
+			{
+				enemies.remove(e);
+				e--;
+			}
+		}
 	}
 
 	/*
@@ -65,13 +76,14 @@ public class LogicManager implements ContactListener, InputProcessor
 		Body b2 = f2.getBody();
 		Entity e1 = (Entity)b1.getUserData();
 		Entity e2 = (Entity)b2.getUserData();
-		if(e1.getClass().isInstance(player)&&enemies.contains(e2)) {
+		if((e1 instanceof Player)&&enemies.contains(e2)) {
 			arbE = (Enemy)e2;
 			if(Constants.ATTACKING==(player.state&Constants.ATTACKING)&&f1==player.getFixture(Constants.PLAYER_WEAPON)) {
 				player.knockback(arbE.getBody());
 				player.damage(arbE);
 			}
-			if(Constants.ATTACKING==(arbE.state&Constants.ATTACKING)&&f1==player.getFixture(Constants.PLAYER_MAIN)) {
+			//System.out.println(f1==player.getFixture(Constants.PLAYER_HITBOX));
+			if(Constants.ATTACKING==(arbE.state&Constants.ATTACKING)&&f1==player.getFixture(Constants.PLAYER_HITBOX)) {
 				arbE.knockback(player.getBody());
 				arbE.damage(player);
 			}

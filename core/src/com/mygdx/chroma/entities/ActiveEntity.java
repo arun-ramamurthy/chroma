@@ -5,34 +5,47 @@ package com.mygdx.chroma.entities;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.mygdx.chroma.Constants;
+import com.mygdx.chroma.Spriting;
+import com.mygdx.chroma.screens.WorldState;
 
 /** @author Arun */
 public abstract class ActiveEntity extends Entity
 {
 
-	/** A collection of bits to decide the state of the player; i.e. is he moving, jumping,
+	/** A collection of bits to decide the state of the entity; i.e. is it moving, jumping,
 	 * attacking, etc. */
-	public int	state;
+	public int			state;
 	/** The direction the entity is facing. See Constants.LEFT and Constants.RIGHT */
 	protected boolean	dir;
+	/** The health of the enemy. */
+	private int			hp;
+	private int			baseHp;
 
 	@Override
 	public void update()
 	{
 		super.update();
-		updateMovement();
+		if((state&Constants.STUNNED)==Constants.STUNNED) {
+			state &= ~Constants.MOVING;
+			if(this instanceof Player) {
+				if(Constants.getElapsed(Constants.STUNNED)>Constants.PLAYER_STUN_TIME) state &= ~Constants.STUNNED;
+			}
+			else if(Constants.getElapsed(Constants.STUNNED)>Constants.STUN_TIME) state &= ~Constants.STUNNED;
+
+		}
+		if((state&Constants.STUNNED)!=Constants.STUNNED) updateMovement();
 	}
 
 	public void draw(SpriteBatch batch)
 	{
-
 		float renderX, renderY, renderW, renderH, theta;
 		for(Integer tag : this.getData().keySet()) {
-
 			renderX = (Constants.PHYSICS_WIDTH/2+body.getPosition().x-data.get(tag).getWidth()/2+data.get(tag).getxOffset())
 						*Constants.PIXELS_PER_METER;
 			renderY = (Constants.PHYSICS_HEIGHT/2+body.getPosition().y-data.get(tag).getHeight()/2+data.get(tag).getyOffset())
@@ -69,7 +82,15 @@ public abstract class ActiveEntity extends Entity
 						theta);
 
 			batch.setColor(Color.WHITE);
+
 		}
+		drawHP(batch);
+
+	}
+
+	public void drawHP(SpriteBatch batch)
+	{
+
 	}
 
 	/** How the entity must move during each interval. Left non-overridden for non-moving entities. */
@@ -97,6 +118,25 @@ public abstract class ActiveEntity extends Entity
 		}
 	}
 
+	public void knockback(Body body)
+	{
+
+	}
+
+	public void damage(ActiveEntity e)
+	{
+		e.state |= Constants.STUNNED;
+		Constants.setTimestamp(Constants.STUNNED);
+
+	}
+
+	public void loseHealth(int dmg)
+	{
+		setHP(getHP()-dmg);
+		if(this instanceof Player)
+			WorldState.playerHP=this.getHP();
+	}
+
 	/** Returns the private variable, this.dir.
 	 * 
 	 * @return this.dir */
@@ -113,4 +153,40 @@ public abstract class ActiveEntity extends Entity
 	{
 		this.dir = dir;
 	}
+
+	/** Returns the private variable, this.hp.
+	 * 
+	 * @return this.hp */
+	public int getHP()
+	{
+		return this.hp;
+	}
+
+	/** Sets the private variable, this.hp, to the passed parameter, hp.
+	 * 
+	 * @param hp
+	 *            the new value of this.hp */
+	public void setHP(int hp)
+	{
+		this.hp = hp;
+	}
+
+	/** Returns the private variable, this.baseHp.
+	 * 
+	 * @return this.baseHp */
+	public int getBaseHp()
+	{
+		return this.baseHp;
+	}
+
+	/** Sets the private variable, this.baseHp, to the passed parameter, baseHp.
+	 * 
+	 * @param baseHp
+	 *            the new value of this.baseHp */
+	public void setBaseHp(int baseHp)
+	{
+		this.baseHp = baseHp;
+		this.hp = baseHp;
+	}
+
 }

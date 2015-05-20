@@ -35,6 +35,7 @@ public abstract class Entity
 	protected Hashtable<Integer, FixtureData>	data;
 	/** The state time of the entity. Used for animations. */
 	protected float								atime;
+	
 
 	/** Default construct. */
 	public Entity()
@@ -91,6 +92,7 @@ public abstract class Entity
 			fixture = this.body.getFixtureList().get(this.body.getFixtureList().size-1);
 			this.getData().get(tag).setFixture(fixture);
 		}
+		this.body.setFixedRotation(true);
 		this.body.setUserData(this);
 	}
 
@@ -98,7 +100,6 @@ public abstract class Entity
 	public void update()
 	{
 		updateTextures();
-
 	}
 
 	/** How the entity's appearance changes during each interval. */
@@ -107,7 +108,6 @@ public abstract class Entity
 
 	}
 
-	
 	/** Returns the private variable, this.bdef.
 	 * 
 	 * @return this.bdef */
@@ -154,5 +154,4 @@ public abstract class Entity
 			return this.data.get(tag).getFixture();
 	}
 
-	
 }

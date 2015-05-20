@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.chroma.screens.FightScreen;
+import com.mygdx.chroma.screens.MapScreen;
 import com.mygdx.chroma.screens.ScreenManager;
+import com.mygdx.chroma.screens.TitleScreen;
 
 public class ChromaMain extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -15,7 +17,7 @@ public class ChromaMain extends ApplicationAdapter {
 	@Override
 	public void create () {
 		batch=new SpriteBatch();
-		ScreenManager.setScreen(new FightScreen());
+		ScreenManager.setScreen(new TitleScreen());
 	}
 
 	public void dispose() {

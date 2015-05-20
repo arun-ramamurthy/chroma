@@ -7,7 +7,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -16,20 +18,14 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.mygdx.chroma.Constants;
 import com.mygdx.chroma.FixtureData;
 import com.mygdx.chroma.Spriting;
+import com.mygdx.chroma.screens.WorldState;
 
 /** The player of the game in the battle scenes. */
 public class Player extends ActiveEntity
 {
 
-	
 	public int	wepType;
 	public int	attackLength;
-
-	/** Default constructor. Used just to check the class of entities. */
-	public Player()
-	{
-
-	}
 
 	/** Creates a new player at a specified location.
 	 * 
@@ -42,6 +38,9 @@ public class Player extends ActiveEntity
 		super();
 		wepType = Constants.SPEAR; // TEMP
 
+		this.setBaseHp(1000);
+		this.setHP(WorldState.playerHP);
+		
 		// Body work
 		this.bDef.type = BodyType.DynamicBody;
 		this.bDef.position.set(x, y);
@@ -61,13 +60,23 @@ public class Player extends ActiveEntity
 		data.setFd(fixture);
 		this.data.put(Constants.PLAYER_MAIN, data);
 
+		// main hitbox fixture work
+		PolygonShape hbShape = new PolygonShape();
+		FixtureData hbData = new FixtureData(Constants.PLAYER_HITBOX, Spriting.BLANK, Constants.ID_PLAYER.x, Constants.ID_PLAYER.y);
+		FixtureDef hbFixture = new FixtureDef();
+		hbShape.setAsBox(hbData.getWidth()/2, hbData.getHeight()/2);
+		hbFixture.shape = hbShape;
+		hbFixture.isSensor = true;
+		hbData.setFd(hbFixture);
+		this.data.put(Constants.PLAYER_HITBOX, hbData);
+
 		// weapon fixture work
 		PolygonShape wepShape = new PolygonShape();
 		FixtureData wepData = new FixtureData();
 		switch(wepType)
 		{
 			case Constants.SPEAR:
-				wepData = new FixtureData(Constants.PLAYER_WEAPON, Spriting.SPEAR, 1.5f, 0.25f, Constants.IP_SPEAR.x, Constants.IP_SPEAR.y, 0);
+				wepData = new FixtureData(Constants.PLAYER_WEAPON, Spriting.SPEAR, 1.0f, 0.25f, Constants.IP_SPEAR.x, Constants.IP_SPEAR.y, 0);
 				wepShape.setAsBox(
 						wepData.getWidth()/2,
 						wepData.getHeight()/2,
@@ -91,7 +100,7 @@ public class Player extends ActiveEntity
 	@Override
 	public void update()
 	{
-		this.body.setFixedRotation(true);
+
 		super.update();
 		if(this.isDir(Constants.LEFT))
 			this.getData().get(Constants.PLAYER_WEAPON).setxOffset(
@@ -103,7 +112,6 @@ public class Player extends ActiveEntity
 		if(Constants.CHARGING==(this.state&Constants.CHARGING)) this.charge();
 		if(Constants.ATTACKING==(this.state&Constants.ATTACKING)) this.attack();
 
-		
 	}
 
 	@Override
@@ -116,15 +124,40 @@ public class Player extends ActiveEntity
 					Spriting.ANIM_PLAYER_RUNNING.getKeyFrame(atime += Gdx.graphics.getDeltaTime(), true));
 		}
 	}
+	
+	@Override
+	public void drawHP(SpriteBatch batch)
+	{
+		batch.end();
+		
+		Spriting.brush.begin(ShapeType.Filled);
+		Spriting.brush.setColor(Color.RED);
+		Spriting.brush.rect(.05f*Constants.SCREEN_WIDTH, 0.9f*Constants.SCREEN_HEIGHT, (Constants.SCREEN_WIDTH*0.9f)*((float)this.getHP()/this.getBaseHp()), Constants.SCREEN_HEIGHT*0.05f);
+		Spriting.brush.end();
+		
+		Spriting.brush.begin(ShapeType.Line);
+		Spriting.brush.setColor(Color.WHITE);
+		Spriting.brush.rect(.05f*Constants.SCREEN_WIDTH, 0.9f*Constants.SCREEN_HEIGHT, (Constants.SCREEN_WIDTH*0.9f), Constants.SCREEN_HEIGHT*0.05f);
+		Spriting.brush.end();
+		
+		batch.begin();
+		Spriting.pen.setColor(Color.BLACK);
+		Spriting.pen.draw(batch, "HP: "+ this.getHP() +" / "+ this.getBaseHp(), .05f*Constants.SCREEN_WIDTH, 0.93f*Constants.SCREEN_HEIGHT);
+		
+	}
 
 	@Override
 	public void updateMovement()
 	{
-		if((state&Constants.STUNNED)==Constants.STUNNED) return;
-
+		super.updateMovement();
 		if(((state&Constants.JUMPING)!=Constants.JUMPING)&&Gdx.input.isKeyPressed(Keys.UP)) {
 			state |= Constants.JUMPING;
-			this.body.applyLinearImpulse(0f, 4f, this.body.getPosition().x, this.body.getPosition().y, true);
+			this.body.applyLinearImpulse(
+					0f,
+					Constants.JUMP_FORCE,
+					this.body.getPosition().x,
+					this.body.getPosition().y,
+					true);
 		}
 
 		if(Gdx.input.isKeyPressed(Keys.LEFT)) {
@@ -189,7 +222,7 @@ public class Player extends ActiveEntity
 						if(t<.05)
 							this.body.applyLinearImpulse(
 									dir*.1f,
-									1f,
+									Constants.JUMP_FORCE/3f,
 									this.body.getPosition().x,
 									this.body.getPosition().y,
 									true);
@@ -204,7 +237,7 @@ public class Player extends ActiveEntity
 						break;
 					case Constants.STRONG:
 						this.body.applyLinearImpulse(
-								5*dir,
+								3*dir,
 								0,
 								this.body.getPosition().x,
 								this.body.getPosition().y,
@@ -240,13 +273,13 @@ public class Player extends ActiveEntity
 				switch(attackLength)
 				{
 					case Constants.WEAK:
-						enemy.applyLinearImpulse(dir*0.5f, 0, enemy.getPosition().x, enemy.getPosition().y, true);
+						enemy.applyLinearImpulse(dir*0.1f, 0, enemy.getPosition().x, enemy.getPosition().y, true);
 						break;
 					case Constants.MEDIUM:
-						enemy.applyLinearImpulse(dir*0.1f, 2f, enemy.getPosition().x, enemy.getPosition().y, true);
+						enemy.applyLinearImpulse(dir*0.1f, 0.5f, enemy.getPosition().x, enemy.getPosition().y, true);
 						break;
 					case Constants.STRONG:
-						enemy.applyLinearImpulse(dir*0.5f, 0, enemy.getPosition().x, enemy.getPosition().y, true);
+						enemy.applyLinearImpulse(dir*1f, 0, enemy.getPosition().x, enemy.getPosition().y, true);
 						break;
 				}
 				break;
@@ -275,8 +308,43 @@ public class Player extends ActiveEntity
 	 *            the enemy attacked */
 	public void damage(Enemy enemy)
 	{
-		enemy.state |= Constants.STUNNED;
-		Constants.setTimestamp(Constants.STUNNED);
+		switch(wepType)
+		{
+			case Constants.SPEAR:
+				switch(attackLength)
+				{
+					case Constants.WEAK:
+						enemy.loseHealth(2);
+						break;
+					case Constants.MEDIUM:
+						enemy.loseHealth(5);
+						break;
+					case Constants.STRONG:
+						enemy.loseHealth(5);
+						break;
+				}
+				break;
+
+			case Constants.BOOMERANG:
+				switch(attackLength)
+				{
+					case Constants.WEAK:
+
+						break;
+					case Constants.MEDIUM:
+
+						break;
+					case Constants.STRONG:
+
+						break;
+				}
+				break;
+		}
+
+		if(attackLength!=Constants.WEAK) {
+			enemy.state |= Constants.STUNNED;
+			Constants.setTimestamp(Constants.STUNNED);
+		}
 
 	}
 
