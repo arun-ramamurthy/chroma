@@ -86,7 +86,7 @@ public class MapScreen extends Screen
 
 				WorldState.currRow+=1;
 		}
-		if(WorldState.on[currRow][currCol]==false)
+		if(WorldState.on[WorldState.currRow][WorldState.currCol]==false)
 			encounter=true;
 		else
 			encounter=false;
@@ -108,6 +108,7 @@ public class MapScreen extends Screen
 		for(int row=0; row<Constants.GRID_SIZE; row++)
 			for(int col=0; col<Constants.GRID_SIZE; col++)
 			{
+				
 				if(!WorldState.on[row][col])
 					win = false;
 			}

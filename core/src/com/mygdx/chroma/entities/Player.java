@@ -276,7 +276,7 @@ public class Player extends ActiveEntity
 						enemy.applyLinearImpulse(dir*0.1f, 0, enemy.getPosition().x, enemy.getPosition().y, true);
 						break;
 					case Constants.MEDIUM:
-						enemy.applyLinearImpulse(dir*0.1f, 0.5f, enemy.getPosition().x, enemy.getPosition().y, true);
+						enemy.applyLinearImpulse(dir*0.2f, 0.5f, enemy.getPosition().x, enemy.getPosition().y, true);
 						break;
 					case Constants.STRONG:
 						enemy.applyLinearImpulse(dir*1f, 0, enemy.getPosition().x, enemy.getPosition().y, true);

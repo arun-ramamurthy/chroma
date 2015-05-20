@@ -28,6 +28,7 @@ public abstract class Enemy extends ActiveEntity
 		super.update();
 		this.pX = pX;
 		this.pY = pY;
+		if(this.state == (this.state|Constants.MOVING))
 		if(pX<this.body.getPosition().x) 
 			this.dir=Constants.LEFT;
 		else

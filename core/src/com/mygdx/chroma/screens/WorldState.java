@@ -28,6 +28,11 @@ public class WorldState
 	public static Texture[][] darkMap;
 
 	public static Sprite player;
+	public static float numSlimes=2;
+	public static float numBeasts=0;
+	public static float numSkeletons=0;
+	
+	public static int steps=0;
 	
 	public static void restart()
 	{

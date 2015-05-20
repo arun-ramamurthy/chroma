@@ -23,7 +23,7 @@ public class Skeleton extends Enemy
 	{
 		super();
 
-		this.setBaseHp(1);
+		this.setBaseHp(40);
 		
 		// Body work
 		this.bDef.type = BodyType.DynamicBody;
@@ -44,7 +44,7 @@ public class Skeleton extends Enemy
 		data.setFd(fixture);
 		this.data.put(Constants.MAIN, data);
 
-		state = 0b000;
+		state = Constants.MOVING;
 	}
 
 	@Override
@@ -52,40 +52,52 @@ public class Skeleton extends Enemy
 	{
 		float dir = 1;
 		if(this.isDir(Constants.LEFT)) dir = -1;
+		
+		if((this.state != (this.state | Constants.ATTACKING)) && this.body.getLinearVelocity().x == 0 && this.body.getLinearVelocity().y == 0)
+			this.body.applyLinearImpulse(0f, 2f, this.body.getPosition().x,this.body.getPosition().y , true);
 
-		if(this.state != (this.state | Constants.ATTACKING))
+		else if(this.state != (this.state | Constants.ATTACKING))
 		{
-			this.body.setLinearVelocity(dir*1f, this.body.getLinearVelocity().y);
-			if(Math.abs(this.body.getPosition().x-pX)<=1)
+			
+			this.setSpeed(1.5f);
+			if(Math.abs(this.body.getPosition().x-pX)<1)
 			{
-				this.state = this.state | Constants.ATTACKING;
+				this.state|= Constants.ATTACKING;
+				this.state = this.state & ~Constants.MOVING;
 			}
 		}
-		else if(this.body.getLinearVelocity().x == 0 && this.body.getPosition().x <= 7.45)
-		{
-			this.body.setLinearVelocity(dir*1f, 2f*Constants.JUMP_FORCE);
-		}
+	
 		else
 		{
-			this.body.setLinearVelocity(dir*1f, this.body.getLinearVelocity().y);
-			if(Math.abs(this.body.getPosition().x-pX)>=1.5)
+			this.setSpeed(0.5f);
+			if(Math.abs(this.body.getPosition().x-pX)>=1)
 			{
-				this.state = Constants.MOVING;
+				this.state |= Constants.MOVING;
+				this.state = this.state & ~Constants.ATTACKING;
 			}
 		}
-
+		
+		
 	}
 
 	@Override
 	public void updateTextures()
 	{
 		if(state==0) atime = 0;
-		this.data.get(Constants.MAIN).setTexture(Spriting.ANIM_SKELETON_WALK.getKeyFrame(0));
-		if((state&Constants.ATTACKING)==Constants.ATTACKING) {
+		this.data.get(Constants.MAIN).setTexture(
+				Spriting.ANIM_SKELETON_WALK.getKeyFrame(0));
+		
+		if((state&Constants.MOVING)==Constants.MOVING) {
+			this.data.get(Constants.MAIN).setTexture(
+					Spriting.ANIM_SKELETON_WALK.getKeyFrame(atime += Gdx.graphics.getDeltaTime(), true));
+		}
+		else if((state&Constants.ATTACKING)==Constants.ATTACKING) {
 			this.data.get(Constants.MAIN).setTexture(
 					Spriting.ANIM_SKELETON_ATTACK.getKeyFrame(atime += Gdx.graphics.getDeltaTime(), true));
 		}
+
 	}
+
 
 	public void knockback(Body p)
 	{

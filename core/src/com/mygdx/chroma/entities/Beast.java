@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -23,7 +24,7 @@ public class Beast extends Enemy
 	{
 		super();
 
-		this.setBaseHp(50);
+		this.setBaseHp(75);
 
 		// Body work
 		this.bDef.type = BodyType.DynamicBody;
@@ -31,7 +32,7 @@ public class Beast extends Enemy
 
 		// main body fixture work
 		PolygonShape shape = new PolygonShape();
-		FixtureData data = new FixtureData(Constants.MAIN, Spriting.ANIM_BEAST_WALK.getKeyFrame(0), 1f, 0.5f);
+		FixtureData data = new FixtureData(Constants.MAIN, Spriting.ANIM_BEAST_WALK.getKeyFrame(0), 1.5f, 1f);
 		FixtureDef fixture = new FixtureDef();
 		shape.setAsBox(data.getWidth()/2, data.getHeight()/2);
 		fixture.shape = shape;
@@ -44,51 +45,41 @@ public class Beast extends Enemy
 		data.setFd(fixture);
 		this.data.put(Constants.MAIN, data);
 
-		state = 0b000;
+		state = Constants.MOVING;
 	}
-	@Override
-	public void update(float pX, float pY)
-	{
-		super.update();
-		this.pX = pX;
-		this.pY = pY;
-		if(this.state == (this.state | Constants.MOVING))
-		{
-			if(pX<this.body.getPosition().x) 
-				this.dir=Constants.LEFT;
-			else
-				this.dir=Constants.RIGHT;
-		}
 
-	}
 	@Override
 	public void updateMovement()
 	{
+		
 		float dir = 1;
 		if(this.isDir(Constants.LEFT)) dir = -1;
-		System.out.println(Math.abs(this.body.getPosition().x-pX));
-		if(this.state != (this.state | Constants.ATTACKING))
+		
+		if(this.body.getLinearVelocity().x == 0 && this.body.getLinearVelocity().y == 0)
+			this.body.applyLinearImpulse(0f, 2f, this.body.getPosition().x,this.body.getPosition().y , true);
+
+		else if(this.state != (this.state | Constants.ATTACKING))
 		{
-			this.body.setLinearVelocity(dir*1f, this.body.getLinearVelocity().y);
-			if(Math.abs(this.body.getPosition().x-pX)<=2)
+			
+			this.setSpeed(1f);
+			if(Math.abs(this.body.getPosition().x-pX)<=3)
 			{
-				this.state = this.state | Constants.ATTACKING;
+				this.state|= Constants.ATTACKING;
+				this.state = this.state & ~Constants.MOVING;
 			}
 		}
-		else if(this.body.getLinearVelocity().x == 0 && this.body.getPosition().x <= 7.45)
-		{
-			this.body.setLinearVelocity(dir*1f, 2f*Constants.JUMP_FORCE);
-		}
+	
 		else
 		{
-			this.body.setLinearVelocity(dir*2f, this.body.getLinearVelocity().y);
-			if(Math.abs(this.body.getPosition().x-pX)>=3)
+			this.setSpeed(4f);
+			if(Math.abs(this.body.getPosition().x-pX)>=4)
 			{
-				this.state = Constants.MOVING;
+				//this.body.setLinearVelocity(dir*0.1f,this.body.getLinearVelocity().y);
+				this.state |= Constants.MOVING;
+				this.state = this.state & ~Constants.ATTACKING;
 			}
 		}
-
-
+		
 	}
 
 	@Override
@@ -119,7 +110,7 @@ public class Beast extends Enemy
 	public void damage(ActiveEntity p)
 	{
 		super.damage(p);
-		p.loseHealth(10);
+		p.loseHealth(5);
 
 	}
 }

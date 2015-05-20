@@ -41,6 +41,11 @@ public class Constants
 
 	public static final boolean				WIN					= true;
 	public static final boolean				LOSE				= false;
+	
+	public static final int				MAX_SLIMES				= 10;
+	public static final int				MAX_SKELETONS			= 5;
+	public static final int				MAX_BEASTS				= 3;
+	
 	// DIRECTON AND ANGLING
 	/** Designates the direction as left. */
 	public static final boolean				LEFT				= true;
@@ -125,10 +130,12 @@ public class Constants
 	/** The initial dimensions of the player. */
 	public static final Vector2				ID_PLAYER			= new Vector2(.6f, 1.1f);
 	/** The initial position of the spear relative to the player's main hitbox. */
-	public static final Vector2				IP_SPEAR			= new Vector2(ID_PLAYER.x*(3/4), 0-ID_PLAYER.y*(2/3));
+	public static final Vector2				IP_SPEAR			= new Vector2(ID_PLAYER.x*(1.5f/4f), 0-ID_PLAYER.y*(0.4f/3f));
 
 	public static final float				JUMP_FORCE			= 2f;
 
+	
+	
 	/** The Heavyside function.
 	 * 
 	 * @param t

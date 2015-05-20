@@ -51,6 +51,7 @@ public class Slime extends Enemy
 	public void updateMovement()
 	{
 		double r = Math.random()*1000;
+		this.state |= Constants.MOVING;
 		float dir = 1;
 		if(this.isDir(Constants.LEFT)) dir = -1;
 		if(r>990&&(state&Constants.JUMPING)!=Constants.JUMPING)

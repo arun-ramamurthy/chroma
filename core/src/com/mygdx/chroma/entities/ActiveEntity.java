@@ -117,6 +117,18 @@ public abstract class ActiveEntity extends Entity
 			this.body.createFixture(this.data.get(tag).getFd());
 		}
 	}
+	
+	public void setSpeed(float xVel)
+	{
+		float dir = 1;
+		if(this.dir == Constants.LEFT) dir=-1;
+		
+		if(Math.abs(this.body.getLinearVelocity().x) < xVel)
+			this.body.applyLinearImpulse(dir * Math.abs(this.body.getLinearVelocity().x - xVel), 0, this.body.getPosition().x, this.body.getPosition().y, true);
+		else
+			this.body.applyLinearImpulse(0, 0, this.body.getPosition().x, this.body.getPosition().y, true);
+		System.out.println(this.body.getLinearVelocity().x);	
+	}
 
 	public void knockback(Body body)
 	{

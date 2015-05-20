@@ -61,24 +61,33 @@ public class FightScreen extends Screen
 		camera = new OrthographicCamera(Constants.PHYSICS_WIDTH, Constants.PHYSICS_HEIGHT);
 		dbr = new Box2DDebugRenderer();
 
-		player = new Player(3, 0);
+		player = new Player(-3, -1);
 		player.instantiate(world);
-
+		
+		if(WorldState.numSlimes>Constants.MAX_SLIMES) WorldState.numSlimes=Constants.MAX_SLIMES;
+		if(WorldState.numSlimes>Constants.MAX_SKELETONS) WorldState.numSlimes=Constants.MAX_SKELETONS;
+		if(WorldState.numSlimes>Constants.MAX_BEASTS) WorldState.numSlimes=Constants.MAX_BEASTS;
+		
 		enemies = new ArrayList<Enemy>();
-		for(int i = 0; i<0; i++)
-			enemies.add(new Slime((float)Math.random()*.25f*Constants.PHYSICS_WIDTH, (float).25f
+		for(int i = 1; i<WorldState.numSlimes; i++)
+			//for(int i = 1; i<0; i++)
+			enemies.add(new Slime((float)Math.random()*.6f*Constants.PHYSICS_WIDTH-Constants.PHYSICS_WIDTH/4f, (float).25f
 																						*Constants.PHYSICS_HEIGHT));
-		for(int i = 0; i<0; i++)
-			enemies.add(new Beast((float)Math.random()*.25f*Constants.PHYSICS_WIDTH, (float).25f
+		for(int i = 1; i<WorldState.numBeasts; i++)
+			//for(int i = 1; i<2; i++)
+			enemies.add(new Beast((float)Math.random()*.6f*Constants.PHYSICS_WIDTH-Constants.PHYSICS_WIDTH/4f, (float).25f
 																						*Constants.PHYSICS_HEIGHT));
-		for(int i = 0; i<1; i++)
-			enemies.add(new Skeleton((float)Math.random()*.25f*Constants.PHYSICS_WIDTH, (float).25f
+		for(int i = 1; i<WorldState.numSkeletons; i++)
+			//for(int i = 1; i<0; i++)
+			enemies.add(new Skeleton((float)Math.random()*.6f*Constants.PHYSICS_WIDTH-Constants.PHYSICS_WIDTH/4f, (float).25f
 																						*Constants.PHYSICS_HEIGHT));
 
 		for(Enemy enemy : enemies)
 			enemy.instantiate(world);
 
 		terrain = Terrain.generate(8, Constants.PHYSICS_HEIGHT/6, 0.2f, Spriting.TERR_TOP, Spriting.TERR_SIDE);
+		
+		//terrain = Terrain.generate(8, Constants.PHYSICS_HEIGHT/6, 0f, Spriting.TERR_TOP, Spriting.TERR_SIDE);
 		for(Terrain stack : terrain)
 			stack.instantiate(world);
 
@@ -97,8 +106,18 @@ public class FightScreen extends Screen
 	@Override
 	public void update()
 	{
+		if(Gdx.input.isKeyPressed(Keys.TAB))
+		{
+				enemies.add(new Skeleton((float)Math.random()*.6f*Constants.PHYSICS_WIDTH-Constants.PHYSICS_WIDTH/4f, (float).25f
+						*Constants.PHYSICS_HEIGHT));
+				enemies.get(enemies.size()-1).instantiate(world);
+		}
 		if(enemies.isEmpty() && Gdx.input.isKeyPressed(Keys.SPACE))
 		{
+			WorldState.steps++;
+			WorldState.numSlimes = 2 + (float)(Math.random()*(2*WorldState.steps));
+			WorldState.numBeasts = (float)(Math.random()*(0.5*WorldState.steps));
+			WorldState.numSkeletons = (float)(Math.random()*(0.85*WorldState.steps));
 			Sounds.FIGHT_BGM.stop();
 			ScreenManager.setScreen(WorldState.map);
 		}

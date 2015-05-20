@@ -44,10 +44,10 @@ public class Spriting
 	/** The animation for player movement. */
 	public static final Animation		ANIM_PLAYER_RUNNING	= generateAnimation("player-running.png", 1, 4, 0.1f);
 	public static final Animation		ANIM_SLIME			= generateAnimation("slime.png", 1, 4, 0.25f);
-	public static final Animation 		ANIM_BEAST_WALK = generateAnimation("1beastwalk.png", 1, 3, 0.15f);
+	public static final Animation 		ANIM_BEAST_WALK = generateAnimation("1beastwalk.png", 1, 3, 0.25f);
 	public static final Animation 		ANIM_BEAST_RUN = generateAnimation("1beastrun.png", 1, 3, 0.2f);
-	public static final Animation 		ANIM_SKELETON_WALK = generateAnimation("1summonattack.png", 1, 4, 0.15f);
-	public static final Animation 		ANIM_SKELETON_ATTACK = generateAnimation("1summonwalk.png", 1, 4, 0.15f);
+	public static final Animation 		ANIM_SKELETON_WALK = generateAnimation("1summonwalk.png", 1, 4, 0.15f);
+	public static final Animation 		ANIM_SKELETON_ATTACK = generateAnimation("1summonattack.png", 1, 4, 0.15f);
 	// TOOLS
 	/** Generates an Animation using Libgdx methods.
 	 * 

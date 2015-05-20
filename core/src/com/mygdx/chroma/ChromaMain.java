@@ -18,6 +18,7 @@ public class ChromaMain extends ApplicationAdapter {
 	public void create () {
 		batch=new SpriteBatch();
 		ScreenManager.setScreen(new TitleScreen());
+		//ScreenManager.setScreen(new FightScreen());
 	}
 
 	public void dispose() {
