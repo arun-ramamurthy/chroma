@@ -36,6 +36,10 @@ public class WorldState
 	
 	public static void restart()
 	{
+		steps = 0;
+		numSlimes=2;
+		numBeasts=0;
+		numSkeletons=0;
 		on = new boolean[Constants.GRID_SIZE][Constants.GRID_SIZE];
 		found = new boolean[Constants.GRID_SIZE][Constants.GRID_SIZE];
 		hidden = new boolean[Constants.GRID_SIZE][Constants.GRID_SIZE];
