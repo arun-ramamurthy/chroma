@@ -25,7 +25,6 @@ public class Spriting
 	public static final TextureRegion	PLAYER					= new TextureRegion(new Texture(Gdx.files.internal("player-standing.png")));
 	public static final TextureRegion	SPEAR					= new TextureRegion(new Texture(Gdx.files.internal("spear.png")));
 	public static final TextureRegion	SWORD					= new TextureRegion(new Texture(Gdx.files.internal("sword.png")));
-	public static final TextureRegion	CHAKRAM					= new TextureRegion(new Texture(Gdx.files.internal("1chakram.png")));
 
 	// OTHER
 	public static final TextureRegion	TERR_TOP				= new TextureRegion(new Texture(Gdx.files.internal("grass-block-top.png")));

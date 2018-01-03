@@ -83,14 +83,6 @@ public class Player extends ActiveEntity
 						new Vector2(wepData.getxOffset(), wepData.getyOffset()),
 						wepData.getAngle(Constants.RADIANS));
 				break;
-			case Constants.CHAKRAM:
-				wepData = new FixtureData(Constants.PLAYER_WEAPON, Spriting.CHAKRAM, 0.25f, 0.25f, Constants.IP_CHAKRAM.x, Constants.IP_CHAKRAM.y, 0);
-				wepShape.setAsBox(
-						wepData.getWidth()/2,
-						wepData.getHeight()/2,
-						new Vector2(wepData.getxOffset(), wepData.getyOffset()),
-						wepData.getAngle(Constants.RADIANS));
-				break;
 		}
 		FixtureDef weapon = new FixtureDef();
 		weapon.shape = wepShape;
@@ -269,49 +261,6 @@ public class Player extends ActiveEntity
 					this.data.get(Constants.PLAYER_WEAPON).setAngle(0);
 				}
 				break;
-			case Constants.CHAKRAM:
-				switch(attackLength)
-				{
-					case Constants.WEAK:
-						this.data.get(Constants.PLAYER_WEAPON).setxOffset((float)(Constants.IP_CHAKRAM.x+(5*t/(3f/4f+Math.pow(t, 3))*2)*dir));
-						this.data.get(Constants.PLAYER_WEAPON).setxOffset(
-								(float)(4*Math.pow(t, 2)/(1+Math.pow(t, 3))));
-						if(t>0.05) state = state&~Constants.ATTACKING;
-						break;
-					case Constants.MEDIUM:
-						if(t<.05)
-							this.body.applyLinearImpulse(
-									dir*.1f,
-									Constants.JUMP_FORCE/3f,
-									this.body.getPosition().x,
-									this.body.getPosition().y,
-									true);
-						this.data.get(Constants.PLAYER_WEAPON).setxOffset(Constants.IP_SPEAR.x+(1-Math.abs(1-8*t))*dir);
-						this.data.get(Constants.PLAYER_WEAPON).setyOffset(
-								(float)(Constants.IP_SPEAR.y+((Constants.u(t, 0, 0.1)*Math.pow(15*t, 10)+Constants.u(
-										t,
-										0.1,
-										0.25)*(1-4*t)))));
-						this.data.get(Constants.PLAYER_WEAPON).setAngle(0+dir*(90-Math.abs(90-720*t)));
-						if(t>.25) state = state&~Constants.ATTACKING;
-						break;
-					case Constants.STRONG:
-						this.body.applyLinearImpulse(
-								3*dir,
-								0,
-								this.body.getPosition().x,
-								this.body.getPosition().y,
-								true);
-						if(t>0.25) state = state&~Constants.ATTACKING;
-						break;
-				}
-				// Resets the weapon after each attack
-				if(((state&Constants.ATTACKING)!=Constants.ATTACKING)) {
-					this.data.get(Constants.PLAYER_WEAPON).setxOffset(Constants.IP_CHAKRAM.x);
-					this.data.get(Constants.PLAYER_WEAPON).setyOffset(Constants.IP_CHAKRAM.y);
-					this.data.get(Constants.PLAYER_WEAPON).setAngle(0);
-				}
-				break;
 		}
 		updateFixtures();
 	}
@@ -340,23 +289,8 @@ public class Player extends ActiveEntity
 						break;
 				}
 				break;
-
-			case Constants.CHAKRAM:
-				switch(attackLength)
-				{
-					case Constants.WEAK:
-
-						break;
-					case Constants.MEDIUM:
-
-						break;
-					case Constants.STRONG:
-
-						break;
-				}
-				break;
 		}
-
+chrpom
 	}
 
 	/** Damages and stuns the enemy depending on the attack.
@@ -378,21 +312,6 @@ public class Player extends ActiveEntity
 						break;
 					case Constants.STRONG:
 						enemy.loseHealth(5);
-						break;
-				}
-				break;
-
-			case Constants.CHAKRAM:
-				switch(attackLength)
-				{
-					case Constants.WEAK:
-
-						break;
-					case Constants.MEDIUM:
-
-						break;
-					case Constants.STRONG:
-
 						break;
 				}
 				break;
